@@ -1,10 +1,10 @@
-# Rebuilding the SDK
+# Building the Interface
 
-The jar files required by this package can be downloaded and built as follows. The package's *pom.xml* file can be found in: *Software/Java/*.
+Before use it is required to build the jar file(s) required by this package using Maven™. The package's *pom.xml* file can be found in: *Software/Java/*. Maven requires that a JDK (Java® 7 or later) is installed and that the *JAVA_HOME* environment variable is set to the location of the JDK.
 
 Use the following commands or OS specific equivalents to do a maven build of the package's jar file.
 ```
-$ cd aws-s3/Software/Java
+$ cd matlab-aws-s3/Software/Java
 $ mvn clean verify package
 ```
 

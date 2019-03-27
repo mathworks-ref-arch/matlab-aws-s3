@@ -456,12 +456,11 @@
 ```
 ### @Client/generatePresignedUrl.m
 ```notalanguage
-  GENERATEPRESIGNEDPUT generates a pre-signed HTTP PUT URL
+  GENERATEPRESIGNEDPUT generates a pre-signed HTTP Put or Get URL
   Returns a pre-signed URL (as a char vector) for upload using a HTTP Put
-  request. The URL that is valid for one hour for the named object and bucket.
-  Other URL http request types are not supported at this point.
-  If a URL request type other than put is provided an empty char vector is
-  returned.
+  request or downloading using a Get request. The URL is valid for one hour
+  for the named object and bucket.
+  Other URL HTTP request types are not supported at this point.
  
   Example;
      s3 = aws.s3.Client();
@@ -1516,12 +1515,17 @@
 ### functions/writeSTSCredentialsFile.m
 ```notalanguage
   WRITESTSCREDENTIALSFILE write an STS based credentials file
-  tokenCode is the 2 factor authentication code of choice e.g. from Google
-  authenticator. Note the command must be issued quickly as this value will
-  expire in a number of seconds
-  serialNumber is the AWS 'arn value' e.g. arn:aws:iam::741<REDACTED>02:mfa/joe.blog
-  this can be obtained from the AWS IAM portal interface
-  region is the AWS region of choice e.g. us-west-1
+ 
+  Write an STS based credential file
+ 
+    tokenCode is the 2 factor authentication code of choice e.g. from Google
+    authenticator. Note the command must be issued quickly as this value will
+    expire in a number of seconds
+ 
+    serialNumber is the AWS 'arn value' e.g. arn:aws:iam::741<REDACTED>02:mfa/joe.blog
+    this can be obtained from the AWS IAM portal interface
+ 
+    region is the AWS region of choice e.g. us-west-1
  
   The following AWS command line interface (CLI) command will return STS
   credentials in json format as follows, Note the required multi-factor (mfa)
@@ -1538,7 +1542,7 @@
       }
   }
  
-  However this needs to be rewriten slightly to match the expected format
+  This needs to be rewritten differently to match the expected format
   below:
  
   {

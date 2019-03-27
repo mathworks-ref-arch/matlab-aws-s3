@@ -328,6 +328,4 @@ ans =
     stringValue: 'READ'
 ```
 
--------------------
-
 [//]: #  (Copyright 2018 The MathWorks, Inc.)

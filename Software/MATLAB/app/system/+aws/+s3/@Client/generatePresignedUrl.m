@@ -1,10 +1,9 @@
 function psURL = generatePresignedUrl(obj, bucketName, objectKey, urlType)
-% GENERATEPRESIGNEDPUT generates a pre-signed HTTP PUT URL
+% GENERATEPRESIGNEDPUT generates a pre-signed HTTP Put or Get URL
 % Returns a pre-signed URL (as a char vector) for upload using a HTTP Put
-% request. The URL that is valid for one hour for the named object and bucket.
-% Other URL http request types are not supported at this point.
-% If a URL request type other than put is provided an empty char vector is
-% returned.
+% request or downloading using a Get request. The URL is valid for one hour
+% for the named object and bucket.
+% Other URL HTTP request types are not supported at this point.
 %
 % Example;
 %    s3 = aws.s3.Client();
@@ -43,6 +42,21 @@ if strcmpi(urlType, 'put')
     % we want a URL for the object that works with HTTP PUT so set that method
     generatePresignedUrlRequest = GeneratePresignedUrlRequest(bucketName, objectKey);
     generatePresignedUrlRequest.setMethod(HttpMethod.PUT);
+    generatePresignedUrlRequest.setExpiration(expiration);
+
+    psURLObj = obj.Handle.generatePresignedUrl(generatePresignedUrlRequest);
+    % return the URL as char vector
+    psURL = char(psURLObj.toString);
+elseif strcmpi(urlType, 'get')
+    % get the current time in miliseconds and add one hour to this
+    expiration = java.util.Date();
+    msec = expiration.getTime();
+    msec = msec + (1000 * 60 * 60);
+    expiration.setTime(msec);
+
+    % we want a URL for the object that works with HTTP GET so set that method
+    generatePresignedUrlRequest = GeneratePresignedUrlRequest(bucketName, objectKey);
+    generatePresignedUrlRequest.setMethod(HttpMethod.GET);
     generatePresignedUrlRequest.setExpiration(expiration);
 
     psURLObj = obj.Handle.generatePresignedUrl(generatePresignedUrlRequest);

@@ -16,7 +16,7 @@ mvn clean package
 More details can be found here: [Build](Rebuild.md)
 
 Once built, change directory to the ```Software/MATLAB``` folder and use the ```startup.m``` function to initialize the interface which will use the AWS Credentials Provider Chain to authenticate.
-Please see the [relevant documentation](Documentation/Authentication.md)
+Please see the [relevant documentation](Authentication.md)
 on options on how to specify the credentials.
 
 The package is now ready for use. MATLAB can be configured to call ```startup.m``` on start if preferred so that the package is always available automatically. For further details see: [https://www.mathworks.com/help/matlab/ref/startup.html](https://www.mathworks.com/help/matlab/ref/startup.html)
