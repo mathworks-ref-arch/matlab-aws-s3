@@ -2,7 +2,7 @@
 
 To access the AWS™ service it is necessary to authenticate with AWS. This can be accomplished in two ways:
 1. Using the default AWS Credential Provider Chain, to iterate through the default AWS authentication methods. This is the default authentication mechanism.
-2. Using a custom stored credentials file to define the credentials to be used by a client. To use this mechanism configure the client as follows: *s3.useCredentialsProviderChain = false;*. This disables provider chain.
+2. Using a custom stored credentials file to define the credentials to be used by a client. To use this mechanism configure the client as follows: *<clientName>.useCredentialsProviderChain = false;*. This disables provider chain.
 
 Particularly if using other AWS tools or services the first methods can be more convenient as one can have a common authentication process.
 
@@ -74,12 +74,12 @@ exists on the MATLAB path. The contents of this file need to be of the format:
 
 ```json
 {
-    "aws_access_key_id": "AKIAIVB<REDACTED>I3GQ",
-    "secret_access_key" : "dEKF9ce<REDACTED>9DpgW+0KCzknjYEy",
+    "aws_access_key_id": "AK<REDACTED>GQ",
+    "secret_access_key" : "dE<REDACTED>YEy",
     "region" : "us-west-1"
 }
 ```
-Once configured, this package is ready to connect to Amazon S3. The order of the credential file entries is not significant.
+Once configured, this package is ready to connect to AWS S3. The order of the credential file entries is not significant.
 
 
 ## Using temporary security credentials
@@ -92,20 +92,20 @@ Both of the above approaches can use temporary security credentials. The AWS Sec
 To use temporary credentials a credentials.json file very similar to that used for long term credentials is used. It has an additional entry for a *session_token* as follows:
 ```json
 {
-    "aws_access_key_id": "AS<REDACTED>UYA",
-    "secret_access_key" : "J9Y<REDACTED>BaJXEv",
+    "aws_access_key_id": "AS<REDACTED>YA",
+    "secret_access_key" : "J9<REDACTED>Ev",
     "region" : "us-west-1",
-    "session_token" : "FQoDYX<REDACTED>KL7kw88F"
+    "session_token" : "FQ<REDACTED>8F"
 }
 ```
 
 The AWS CLI is one method that can be used to generate these credentials. For example the following command uses multi factor authentication via Google's Authenticator™ App to generate the *token-code*, the corresponding *serial-number* is available from the AWS IAM console. The command then returns values required for the above credentials.json file. Note the *:mfa* form of the arn.
 ```
-$ aws sts get-session-token --token-code 631446 --serial-number arn:aws:iam::741234567802:mfa/joe.blog
+$ aws sts get-session-token --token-code 631446 --serial-number arn:aws:iam::7<REDACTED>2:mfa/joe.blog
 {
     "Credentials": {
-        "SecretAccessKey": "J9Y<REDACTED>BaJXEv",
-        "SessionToken": "FQoDYX<REDACTED>KL7kw88F",
+        "SecretAccessKey": "J9<REDACTED>Ev",
+        "SessionToken": "FQ<REDACTED>8F",
         "Expiration": "2017-10-26T08:21:18Z",
         "AccessKeyId": "AS<REDACTED>UYA"
     }

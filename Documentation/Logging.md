@@ -53,8 +53,7 @@ Both the component and mnemonic fields must adhere to the following syntax rules
 
 Messages logged to the console with a level of warning are displayed as if they were native MATLAB warnings and similarly error level messages are displayed as if they were native errors.
 
-For full details see: *aws-common/Software/MATLAB/app/functions/Logger.m*.
+For full details see: *matlab-aws-common/Software/MATLAB/app/functions/Logger.m*.
 
-------------
 
 [//]: #  (Copyright 2018 The MathWorks, Inc.)

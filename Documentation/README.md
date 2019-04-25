@@ -1,4 +1,4 @@
-## MATLAB Interface to AWS S3
+# MATLAB Interface *for AWS S3*
 
 Amazon™ Simple Storage Service, [Amazon S3™](https://aws.amazon.com/s3/), is an object storage service to store and retrieve any amount of data. It is designed to be highly reliable, and to scale beyond trillions of objects.
 
@@ -21,7 +21,7 @@ Buckets are the containers for objects. Access to a bucket can be controlled. Ad
     c. [Running on MATLAB Distributed Computing Server](MATLABDistributed.md)    
 8. [References](References.md)
 9. Appendix   
-    a. [Rebuilding the SDK](Rebuild.md)    
+    a. [Building the SDK](Rebuild.md)    
     b. [S3 API Documentation](awsS3ApiDoc.md)    
 
 

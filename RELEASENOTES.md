@@ -1,8 +1,12 @@
 # MATLAB Interface *for AWS S3*
 # Release Notes
-## Release 0.5.1 February 2019
+
+## Release 0.5.2 April 2019
 * Documentation improvements
 * Added get support to generatePresignedUrl()
+
+## Release 0.5.1 February 2019
+* Documentation improvements
 
 ## Release 0.5.0 January 2019
 * Changed license

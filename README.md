@@ -1,11 +1,11 @@
 # MATLAB® Interface *for AWS S3™*
 
-MATLAB® interface for the Amazon Web Services S3™ service. This is a low-level, general interface that can be customized if the higher-level interface as provided in MATLAB does not support your needs. see here https://www.mathworks.com/help/matlab/import_export/work-with-remote-data.html for more details on what is provided in MATLAB.
+This is a MATLAB® interface for the Amazon Web Services S3™ service. This is a low-level, general interface that can be customized if the higher-level interface as provided in MATLAB does not support your needs. see here https://www.mathworks.com/help/matlab/import_export/work-with-remote-data.html for more details on what is provided in MATLAB.
 
 ## Requirements
 ### MathWorks products
 * Requires MATLAB release R2017a or later.
-* AWS Common utilities found at https://github.com/mathworks-ref-arch/matlab-aws-common.
+* AWS Common utilities found at https://github.com/mathworks-ref-arch/matlab-aws-common
 
 ### 3rd party products
 * Amazon Web Services account   
@@ -31,7 +31,7 @@ cd Software/Java
 mvn clean package
 ```
 
-Once built, use the *startup.m* function to initialize the interface which will use the
+Once built, use the ```/Software/MATLAB/startup.m``` function to initialize the interface which will use the
 AWS Credentials Provider Chain to authenticate. Please see the [relevant documentation](Documentation/Authentication.md)
 on how to specify the credentials.
 
@@ -79,7 +79,7 @@ The interface supports a number of S3 features including credential-free authent
 4. [MATLAB Distributed Computing Server™](https://www.mathworks.com/products/distriben.html) (R2017a or later)
 
 ## License
-The license for the MATLAB Interface for AWS S3 is available in the [LICENSE.TXT](LICENSE.TXT) file in this GitHub repository. This package uses certain third-party content which is licensed under separate license agreements. See the [pom.xml](Software/Java/pom.xml) file for third-party software downloaded at build time.
+The license for the MATLAB Interface *for AWS S3* is available in the [LICENSE.TXT](LICENSE.TXT) file in this GitHub repository. This package uses certain third-party content which is licensed under separate license agreements. See the [pom.xml](Software/Java/pom.xml) file for third-party software downloaded at build time.
 
 ## Enhancement Request
 Provide suggestions for additional features or capabilities using the following link:   
