@@ -148,7 +148,9 @@ end
 % uploading a file first check it exists
 % does not check if it is a MAT file
 if exist(absFileName,'file') ~= 2
-    write(logObj,'error',['File not found: ',absFileName]);
+    % Escape any back slashes in paths
+    absFileName = strrep(absFileName, '\', '\\');
+    write(logObj,'error', ['File not found: ', absFileName]);
 end
 
 % Create a java file handle for the file
@@ -157,7 +159,7 @@ fObj = File(absFileName);
 % if keyName is set then use that as the name otherwise reuse the
 % object i.e. the file path when creating the request
 if isempty(keyName)
-    write(logObj,'debug',['Specific key name not set, using: ', object]);
+    write(logObj, 'debug', ['Specific key name not set, using: ', object]);
     keyName = object;
 end
 

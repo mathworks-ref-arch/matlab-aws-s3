@@ -11,21 +11,36 @@ function [varargout] = listBuckets(obj, varargin)
 logObj = Logger.getLogger();
 write(logObj,'verbose','Listing buckets');
 bucketData = obj.Handle.listBuckets();
+% get the size of the array so the fields can be preallocated
+size = bucketData.size();
 
 bCount = 0;
+bucketName = cell(1, size);
+bucketCreationDate = cell(1, size);
+bucketOwner = cell(1, size);
+bucketOwnerId = cell(1, size);
+
 while (bucketData.iterator.hasNext())
     % We have a bucket to process
     bucketItem = bucketData.iterator.next();
     bCount = bCount+1;
 
     % Get the name
-    bucketName(bCount) = {char(bucketItem.getName())}; %#ok<AGROW>
-    bucketCreationDate(bCount) = {char(bucketItem.getCreationDate)}; %#ok<AGROW>
+    bucketName(bCount) = {char(bucketItem.getName())}; 
+    bucketCreationDate(bCount) = {char(bucketItem.getCreationDate)}; 
 
     % TODO: Support multiple owners
-    bucketOwner(bCount) = {char(bucketItem.getOwner().getDisplayName())}; %#ok<AGROW>
-    bucketOwnerId(bCount) = {char(bucketItem.getOwner().getId())}; %#ok<AGROW>
-
+    ownerJ = bucketItem.getOwner();
+    % if using the Google Cloud Storage interop service then owner can be
+    % empty
+    if isempty(ownerJ)
+        bucketOwner(bCount) = {char.empty};
+        bucketOwnerId(bCount) = {char.empty};
+    else
+        bucketOwner(bCount) = {char(bucketItem.getOwner().getDisplayName())}; 
+        bucketOwnerId(bCount) = {char(bucketItem.getOwner().getId())}; 
+    end
+    
     bucketData.remove(0); % Java uses 0 based indexing
 end
 
@@ -37,7 +52,7 @@ if nargout == 1
     varargout{1} = bucketTable;
 else
     str = evalc('disp(bucketTable)');
-    write(logObj,'verbose',str);
+    write(logObj,'debug',str);
 end
 
 end %function

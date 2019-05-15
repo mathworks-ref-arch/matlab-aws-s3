@@ -1,6 +1,10 @@
 # MATLAB Interface *for AWS S3*
 # Release Notes
 
+## Release 0.5.3 May 2019
+* Endpoint handling bug fix
+* Bug fix to listTables logging
+
 ## Release 0.5.2 April 2019
 * Documentation improvements
 * Added get support to generatePresignedUrl()

@@ -122,7 +122,8 @@ if obj.useCredentialsProviderChain == false
 else
     write(logObj,'verbose','Using Provider Chain based authentication');
 
-    % setup credentials and region provider
+    % setup credentials and region provider using provider chain if useCredentialsProviderChain
+    % is true
     awsCredentials = DefaultAWSCredentialsProviderChain();
     regionProvider = DefaultAwsRegionProviderChain();
 
@@ -138,6 +139,7 @@ else
 
 end
 
+% S3 is universally available so no need to check it exists in the given AWS region
 
 %% Initialize a handle to the S3 client
 switch obj.encryptionScheme
@@ -166,21 +168,19 @@ case {aws.s3.EncryptionScheme.NOENCRYPTION, aws.s3.EncryptionScheme.SSEC, aws.s3
 end
 
 
-%% set the builder region for credentials.json case
-if obj.useCredentialsProviderChain == false
-    builderH.setRegion(awsRegion.getName)
-end
-
-
-%% configure the Endpoint if set
-if ~isempty(obj.endpointURI.Host)
-    % write(logObj,'debug','Configuring S3 Endpoint');
-    % if the URI has a path we don't include it in the end point as this is likely bucket name
-    endpointHostPort = [char(endpointURI.Scheme) '://' char(endpointURI.EncodedAuthority)];
-    endpointRegion =  awsRegion.getName;
+%% configure the Endpoint if set else just set the region
+if isempty(obj.endpointURI.Host)
+    % set the region directly if not using a custom endpoint otherwise the region
+    % is configured as part of the endpoint configuration
+    builderH.setRegion(awsRegion.getName);
+else
+    % write(logObj,'verbose','Configuring Endpoint');
+    % if the URI has a path we don't include it in the endpoint as this is likely bucket name
+    endpointHostPort = [char(obj.endpointURI.Scheme) '://' char(obj.endpointURI.EncodedAuthority)];
+    endpointRegion = char(awsRegion.getName);
     write(logObj,'verbose',['Setting Endpoint URI & Region to: ',endpointHostPort,' ',endpointRegion]);
     endPointConfig = javaObject('com.amazonaws.client.builder.AwsClientBuilder$EndpointConfiguration',endpointHostPort, endpointRegion);
-    builderH.setEndpointConfiguration(endPointConfig)
+    builderH.setEndpointConfiguration(endPointConfig);
 end
 
 
