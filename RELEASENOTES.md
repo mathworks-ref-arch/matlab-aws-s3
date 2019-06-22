@@ -1,5 +1,7 @@
 # MATLAB Interface *for AWS S3*
 # Release Notes
+## Release 0.5.4 (21st Jun 2019)
+* Updated security notice
 
 ## Release 0.5.3 May 2019
 * Endpoint handling bug fix
