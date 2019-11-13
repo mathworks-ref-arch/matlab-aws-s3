@@ -8,7 +8,7 @@ function startup(varargin)
 
 % Don't run the startup file if executed from within a deployed function (CTF)
 if ~isdeployed()
-    
+
     %% Check where this tooling exists and compute paths
     % Get the root path for this repo - you will need to modify this if you
     % move this startup file w.r.t. its location in the repo.
@@ -16,23 +16,23 @@ if ~isdeployed()
 
     %% Add a banner to the top
     iDisplayBanner('MATLAB Interface for AWS S3');
-    
+
     %% Check if the dependencies are in place
     iDisplayBanner('Checking if dependencies are met');
     iCheckDependencies(here);
-    
+
     %% Update MATLAB paths
     iDisplayBanner('Adding MATLAB Paths');
-    
+
     %% Add the common utilities to the path
     iAddCommonUtilities(here);
 
     %% Add the S3 interface to the path
     iAddS3(here);
-    
+
     %% Update the Java class paths
     iAddJar(here);
-    
+
     %% Create logger singleton
     iCreateLoggerSingleton();
 end
@@ -41,7 +41,7 @@ end
 
 function iCheckDependencies(rootDir)
 
-% Check if the common utilites exist otherwise raise and error and stop
+% Check if the common utilities exist otherwise raise and error and stop
 commonDir = fullfile(fileparts(rootDir),'matlab-aws-common');
 
 if ~exist(commonDir, 'dir')

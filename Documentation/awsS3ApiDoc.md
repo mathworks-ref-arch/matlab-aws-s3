@@ -33,11 +33,6 @@
     my_perm = aws.s3.Permission('read');
     email_addr_grantee = aws.s3.EmailAddressGrantee('joe.blog@example.com');
     my_acl.grantPermission(email_addr_grantee, my_perm);
- 
-
-    Reference page in Doc Center
-       doc aws.s3.AccessControlList
-
 
 
 
@@ -54,7 +49,6 @@
    s3.initialize();
    acl = s3.getObjectAcl(bucketname,keyname);
    grantlist = acl.getGrantsAsList();
- 
 
 
 
@@ -68,7 +62,6 @@
     my_perm = aws.s3.Permission('read');
     email_addr_grantee = aws.s3.EmailAddressGrantee('joe.blog@example.com');
     my_acl.grantPermission(email_addr_grantee, my_perm);
- 
 
 
 
@@ -83,7 +76,6 @@
     owner.setDisplayName('my_display_name');
     owner.setId('aba123456a64f60b91c7736971a81116fb2a07fff2331499c04a967c243b7576');
     acl.setOwner(owner);
- 
 
 
 
@@ -138,11 +130,6 @@
   Specifies the owner is granted Permission.FullControl and the
   GroupGrantee.AllUsers group grantee is granted Permission.Read and
   Permission.Write access.
- 
-
-    Reference page in Doc Center
-       doc aws.s3.CannedAccessControlList
-
 
 
 
@@ -168,11 +155,6 @@
     my_perm = aws.s3.Permission('read');
     my_acl = aws.s3.AccessControlList();
  	my_acl.grantPermission(canonicalgrantee, my_perm);
- 
-
-    Reference page in Doc Center
-       doc aws.s3.CanonicalGrantee
-
 
 
 
@@ -314,11 +296,6 @@
         s3 = aws.s3.Client();
         s3.endpointURI = 'https//mylocals3.example.com';
         s3.initialize();
- 
-
-    Reference page in Doc Center
-       doc aws.s3.Client
-
 
 
 
@@ -363,7 +340,6 @@
  
   The deletion of the bucket destroys this bucket (and all its contents)
   irreversibly.
- 
 
 
 
@@ -376,7 +352,6 @@
   There is no way to undelete an object, so use caution when deleting objects.
  
     s3.deleteObject(bucketName, key);
- 
 
 
 
@@ -410,8 +385,6 @@
     s3 = aws.s3.Client();
     s3.initialize();
     s3.doesObjectExist('com-mathworks-testbucket-jblog', 'myobject');
- 
- 
 
 
 
@@ -432,7 +405,6 @@
   The individual keys can be extracted from a keypair as follows:
     privateKey = keyPair.getPrivate();
     publicKey = keyPair.getPublic();
- 
 
 
 
@@ -449,7 +421,6 @@
     myKey = s3.generateCSESymmetricKey('AES',256);
     By default a 256 bit AES keys will be generated
     myKey = s3.generateCSESymmetricKey();
- 
 
 
 
@@ -466,7 +437,6 @@
      s3 = aws.s3.Client();
      s3.initialize();
      ingestUrl = s3.generatePresignedUrl('myuploadbucket','myobject.mp4','put');
- 
 
 
 
@@ -480,7 +450,6 @@
  
   Example:
     mykey = s3.generateSSECKey();
- 
 
 
 
@@ -494,7 +463,6 @@
   is owned by a 3rd party.
  
     s3.getBucketAcl(bucketName);
- 
 
 
 
@@ -536,7 +504,6 @@
   final argument in the argument list.
  
     s3.getObject(bucketName, keyName, SSECustomerKey);
- 
 
 
 
@@ -548,7 +515,6 @@
   another object
  
     s3.getObjectAcl(bucketName, keyName);
- 
 
 
 
@@ -580,7 +546,6 @@
         s3 = aws.s3.Client();
         s3.encryptionScheme = 'SSES3';
         s3.intialize();
- 
 
 
 
@@ -699,7 +664,6 @@
   'com-mathworks-matlabobject' and 'file' respectively.
  
    s3.putObject('myBucket', 'myObject.mat', 'myObjectName.mat',myObjectMetadata);
- 
 
 
 
@@ -769,7 +733,6 @@
     params = s3.setSSEAwsKeyManagementParams();
  
     params = s3.setSSEAwsKeyManagementParams('c1234567-cba2-456a-ade9-a1a3f84c9a8a');
- 
 
 
 
@@ -781,7 +744,6 @@
   required.
  
   Example:  s3.shutdown()
- 
 
 
 
@@ -804,11 +766,6 @@
     emailaddrgrantee = aws.s3.EmailAddressGrantee('joe.blog@example.com');
     my_perm = s3.Permission('read');
     my_acl.grantPermission(emailaddrgrantee, my_perm);
- 
-
-    Reference page in Doc Center
-       doc aws.s3.EmailAddressGrantee
-
 
 
 
@@ -830,10 +787,6 @@
     SSEC      : sever side encryption with a customer supplied key
     SSEKMS    : server side encryption using the Key Management Service
     SSES3     : server side encryption using S3 managed encryption keys
-
-    Reference page in Doc Center
-       doc aws.s3.EncryptionScheme
-
 
 
 
@@ -857,11 +810,6 @@
      myGrant = aws.s3.Grant(myGrantee, myPermission);
      % or
      myGrant = aws.s3.Grant(myJavaGranteeObject);
- 
-
-    Reference page in Doc Center
-       doc aws.s3.Grant
-
 
 
 
@@ -877,7 +825,6 @@
      grantee = grants{1}.getGrantee();
      % show the identifier of the first grantee
      grantee.Identifier
- 
 
 
 
@@ -911,10 +858,6 @@
  
   In practice values map to URLs that define them, e.g.
   AllUsers maps to http://acs.amazonaws.com/groups/global/AllUsers
-
-    Reference page in Doc Center
-       doc aws.s3.GroupGrantee
-
 
 
 
@@ -963,11 +906,6 @@
     ans =
       1x4 cell array
         {'file'}    {'myMDValue1'}    {'myMDValue2'}    {'myMDValue3'}
- 
-
-    Reference page in Doc Center
-       doc aws.s3.ObjectMetadata
-
 
 
 
@@ -986,7 +924,6 @@
     myMetadata = aws.s3.ObjectMetadata();
     myMetadata.addUserMetadata('myKey', 'myValue');
     s3.putObject('com-mathworks-mytestbucket', 'myData.mat', myMetadata);
- 
 
 
 
@@ -1042,7 +979,6 @@
     myDownloadedMetadata = s3.getObjectMetadata(myBucket, myObjectKey);
     myMap = myDownloadedMetadata.getUserMetaData();
     myMetadataValue = myMap(lower('myMetadataKey'));
- 
 
 
 
@@ -1064,11 +1000,6 @@
     owner = aws.s3.Owner();
     owner.setDisplayName('my_disp_name');
     owner.setId('1234567890abcdef');
- 
-
-    Reference page in Doc Center
-       doc aws.s3.Owner
-
 
 
 
@@ -1085,7 +1016,6 @@
     owner.setDisplayName('my_display_name');
     owner.setId('aba123456a64f60b91c7736971a81116fb2a07fff2331499c04a967c243b7576');
     acl.setOwner(owner);
- 
 
 
 
@@ -1102,7 +1032,6 @@
     owner.setDisplayName('my_display_name');
     owner.setId('aba123456a64f60b91c7736971a81116fb2a07fff2331499c04a967c243b7576');
     acl.setOwner(owner);
- 
 
 
 
@@ -1170,11 +1099,6 @@
  	FULL_CONTROL : Is equivalent to granting READ, READ_ACP, and WRITE_ACP
                    ACL permissions. Allows grantee the READ, READ_ACP, and
                    WRITE_ACP permissions on the object.
- 
-
-    Reference page in Doc Center
-       doc aws.s3.Permission
-
 
 
 
@@ -1224,12 +1148,11 @@
    * Specify TCP socket buffer size hints
   (Only limited proxy related methods are currently available)
  
-  Example:
+  Example, in this case using an s3 client:
     s3 = aws.s3.Client();
     s3.clientConfiguration.setProxyHost('proxyHost','myproxy.example.com');
     s3.clientConfiguration.setProxyPort(8080);
     s3.initialize();
- 
 
     Reference page in Doc Center
        doc aws.ClientConfiguration
@@ -1240,13 +1163,14 @@
 ```
 ### @ClientConfiguration/setProxyHost.m
 ```notalanguage
-  SETPROXYHOST Sets the optional proxy host the client will connect through.
+  SETPROXYHOST Sets the optional proxy host the client will connect through
   This is based on the setting in the MATLAB preferences panel. If the host
   is not set there on Windows then the Windows system preferences will be
-  used. The proxy settings may vary based on the URL, thus a sample URL
-  should be provided if a specific URL is not known https://s3.amazonaws.com
-  is a useful default as it is likely to match the relevant proxy selection
-  rules.
+  used. Though it is not normally the case proxy settings may vary based on the
+  destination URL, if this is the case a URL should be provided for a specific
+  service. If a URL is not provided then https://s3.amazonaws.com is used as
+  a default and is likely to match the relevant proxy selection rules for AWS
+  traffic.
  
   Examples:
  
@@ -1257,55 +1181,52 @@
     To have the proxy host automatically set based on the given URL:
         clientConfig.setProxyHost('autoURL','https://examplebucket.amazonaws.com');
  
-    To force the value of the proxy host TO a given value, e.g. myproxy.example.com:
+    To force the value of the proxy host to a given value, e.g. myproxy.example.com:
         clientConfig.setProxyHost('proxyHost','myproxy.example.com');
     Note this does not overwrite the value set in the preferences panel.
  
-  The s3 client initialization call will invoke setProxyHost();
-  to set preference based on the MATLAB preference if the proxyHost value is not
-  an empty value.
- 
+  The client initialization call will invoke setProxyHost() to set a value based
+  on the MATLAB preference if the proxyHost value is not to an empty value.
 
 
 
 ```
 ### @ClientConfiguration/setProxyPassword.m
 ```notalanguage
-  SETPROXYPASSWORD Sets the optional proxy password.
-  This is based on the setting in the MATLAB preferences panel. If the
-  preferences password is not set then on Windows the OS system preferences
-  will be used.
+  SETPROXYPASSWORD Sets the optional proxy password
+  This is based on the setting in the MATLAB preferences panel. If the password
+  is not set there on Windows then the Windows system preferences will be
+  used.
  
   Examples:
  
     To set the password to a given value:
-        clientConfig.setProxyPassword('2312sdsdes?$!%');
+        clientConfig.setProxyPassword('myProxyPassword');
     Note this does not overwrite the value set in the preferences panel.
  
     To set the password automatically based on provided preferences:
         clientConfig.setProxyPassword();
  
-  The s3 client initialization call will invoke setProxyPassword();
-  to set preference based on the MATLAB preference if the proxyPassword value is
-  not an empty value.
+  The client initialization call will invoke setProxyPassword() to set
+  a value based on the MATLAB preference if the proxy password value is set.
  
   Note, it is bad practice to store credentials in code, ideally this value
   should be read from a permission controlled file or other secure source
   as required.
- 
 
 
 
 ```
 ### @ClientConfiguration/setProxyPort.m
 ```notalanguage
-  SETPROXYPORT Sets the optional proxy port the client will connect through.
+  SETPROXYPORT Sets the optional proxy port the client will connect through
   This is normally based on the setting in the MATLAB preferences panel. If the
   port is not set there on Windows then the Windows system preferences will be
-  used. The proxy settings may vary based on the URL, thus a sample URL
-  should be provided if a specific URL is not known https://s3.amazonaws.com
-  is a useful default as it is likely to match the relevant proxy selection
-  rules.
+  used. Though it is not normally the case proxy settings may vary based on the
+  destination URL, if this is the case a URL should be provided for a specific
+  service. If a URL is not provided then https://s3.amazonaws.com is used as
+  a default and is likely to match the relevant proxy selection rules for AWS
+  traffic.
  
   Examples:
  
@@ -1320,38 +1241,35 @@
         clientConfig.setProxyPort(8080);
     Note this does not alter the value held set in the preferences panel.
  
-  The s3 client initialization call will invoke setProxyPort();
-  to set preference based on the MATLAB preference if the proxyPort value is not
-  an empty value.
- 
+  The client initialization call will invoke setProxyPort() to set a value based
+  on the MATLAB preference if the proxy port value is not an empty value.
 
 
 
 ```
 ### @ClientConfiguration/setProxyUsername.m
 ```notalanguage
-  SETPROXYUSERNAME Sets the optional proxy username.
-  This is based on the setting in the MATLAB preferences panel. If the
-  username is not set there on Windows then the Windows system preferences
-  will be used.
+  SETPROXYUSERNAME Sets the optional proxy username
+  This is based on the setting in the MATLAB preferences panel. If the username
+  is not set there on Windows then the Windows system preferences will be
+  used.
  
   Examples:
  
      To set the username to a given value:
-         clientConfig.setProxyUsername('JoeProxyUser');
+         clientConfig.setProxyUsername('myProxyUsername');
      Note this does not overwrite the value set in the preferences panel.
  
      To set the password automatically based on provided preferences:
          clientConfig.setProxyUsername();
  
-  The s3 client initialization call will invoke setProxyUsername();
+  The client initialization call will invoke setProxyUsername();
   to set preference based on the MATLAB preference if the proxyUsername value is
   not an empty value.
  
   Note it is bad practice to store credentials in code, ideally this value
   should be read from a permission controlled file or other secure source
   as required.
- 
 
 
 

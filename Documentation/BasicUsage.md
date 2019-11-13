@@ -56,7 +56,6 @@ bucketList = s3.listBuckets();
 
 ## Storing data as an S3 object
 Once a bucket has been created one can store data in it assuming one has write permission for the bucket in question. The API supports storing generic files containing arbitrary data or mat files. The following example shows a .mat file (holding 10000 random numbers) can be uploaded to an S3 bucket. The object "key" is the unique name by which the object is known within the bucket. The `putObject()` method which applies a canned access control policy to the new object.
-
 ```
 % create and initialize the client
 s3 = aws.s3.Client();
@@ -114,7 +113,6 @@ If the method will result in a file being overwritten a warning is produced and 
 
 ## Deleting an object
 Removes the specified object from the specified S3 bucket. Unless versioning has been turned on for the bucket, there is no way to undelete an object, so use caution when deleting objects.
-
 ```
 s3.deleteObject('mys3bucket','myobjectkey');
 ```
@@ -122,7 +120,6 @@ s3.deleteObject('mys3bucket','myobjectkey');
 
 ## Deleting a bucket
 Buckets cannot be deleted if they are not empty. An empty bucket can be deleted using:
-
 ```
 s3.deleteBucket('com-myorg-mybucket');
 ```
@@ -135,7 +132,6 @@ A bucket must first be empty of objects in order to delete it.
 This package consciously uses semantics that largely mirror those of the AWS S3 Java SDK. This recognizes the scale of S3 ecosystem and the fact that many S3 users interact with the service using a variety of tools. However, a MATLAB approach for the core functionality via *load* and *save* commands is also available. These commands support most of the functionality of the load and save commands but in the context of S3.
 
 As an example:
-
 ```
 % Create a client for S3
 s3 = aws.s3.Client();
@@ -164,4 +160,17 @@ s3.deleteBucket(bucketname);
 s3.shutdown;
 ```
 
-[//]: #  (Copyright 2018 The MathWorks, Inc.)
+## Disabling SSL Certificate checking
+Ordinarily disabling SSL certificate checking is strongly discouraged. However, there is a specific use case where this can be useful. If using an on-premise S3 implementation, e.g. a NetApp® StorageGRID® system, which has been configured with a self-signed certificate on a network without Internet connectivity, then an SSL connection to the server is used however the certificate cannot be externally validated. This will cause an error in the underlying Java security libraries that validate the connection. the following line of code can be used in MATLAB to disable the certificate check for the AWS SDK. This should be called prior to client initialization. It should not be used in any scenario where the validity of the certificate is outside of the user's direct control, e.g. accessing an S3 service, AWS or otherwise, via the Internet.
+```
+java.lang.System.setProperty(com.amazonaws.SDKGlobalConfiguration.DISABLE_CERT_CHECKING_SYSTEM_PROPERTY, "false");
+```
+
+The following code can be used to check the status of this setting, a logical is returned:
+```
+sdkGlobalConfiguration = com.amazonaws.SDKGlobalConfiguration;
+certCheckStatus = sdkGlobalConfiguration.isCertCheckingDisabled;
+```
+
+
+[//]: #  (Copyright 2018-2019 The MathWorks, Inc.)

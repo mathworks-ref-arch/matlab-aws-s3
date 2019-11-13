@@ -2,7 +2,7 @@
 
 To access the AWS™ service it is necessary to authenticate with AWS. This can be accomplished in two ways:
 1. Using the default AWS Credential Provider Chain, to iterate through the default AWS authentication methods. This is the default authentication mechanism.
-2. Using a custom stored credentials file to define the credentials to be used by a client. To use this mechanism configure the client as follows: *<clientName>.useCredentialsProviderChain = false;*. This disables provider chain.
+2. Using a custom stored credentials file to define the credentials to be used by a client. To use this mechanism configure the client as follows: *clientName.useCredentialsProviderChain = false;* This disables provider chain.
 
 Particularly if using other AWS tools or services the first methods can be more convenient as one can have a common authentication process.
 

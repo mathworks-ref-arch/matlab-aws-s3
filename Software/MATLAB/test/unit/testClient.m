@@ -31,7 +31,7 @@ classdef testClient < matlab.unittest.TestCase
     end
 
     methods (TestMethodTeardown)
-        function testTearDown(testCase)
+        function testTearDown(testCase) %#ok<MANU>
 
         end
     end
@@ -92,7 +92,7 @@ classdef testClient < matlab.unittest.TestCase
         function testclientConfigFail(testCase)
             write(testCase.logObj,'debug','Testing testclientConfigFail');
             % Create the client and initialize with a proxy that should
-            % fail
+            % fail because it does not exist
             s3 = aws.s3.Client();
             s3.useCredentialsProviderChain = false;
             s3.clientConfiguration.setProxyHost('proxyHost','myproxy.example.com');
@@ -287,6 +287,48 @@ classdef testClient < matlab.unittest.TestCase
             pause(1.1);
         end
 
+        function testputgetObjectPathStyleAccess(testCase)
+            write(testCase.logObj,'debug','Testing testputgetObjectPathStyleAccess');
+            % Create the client and initialize
+            % This test will fail when AWS stop supporting new buckets using
+            % path style access
+            s3 = aws.s3.Client();
+            s3.useCredentialsProviderChain = false;
+            s3.pathStyleAccessEnabled = true;
+            s3.initialize();
+
+            % create a small block of data and save it to a file
+            x = rand(100,100);
+            uploadfile = [tempname,'.mat'];
+            save(uploadfile, 'x');
+
+            % create a bucket to hold the object
+            bucketname = lower(matlab.lang.makeValidName(['com.example.awss3.unittest',datestr(now)],'ReplacementStyle','delete'));
+            s3.createBucket(bucketname);
+
+            % upload the file as an object
+            s3.putObject(bucketname,uploadfile);
+
+            % when downloaded the file will have the same name as the previously
+            % uploaded file so delete that first, change over the variable
+            % name for clarity
+            downloadfile = uploadfile;
+            delete(uploadfile);
+            s3.getObject(bucketname,downloadfile);
+
+            %compare the downloaded file to the original generate random values
+            y = load(downloadfile,'x');
+
+            testCase.verifyTrue(isequal(x,y.x));
+            % remove the bucket and the contained object afterwards
+            s3.deleteObject(bucketname,downloadfile);
+            s3.deleteBucket(bucketname);
+            s3.shutdown();
+            % delete the temporary file
+            delete(downloadfile);
+            pause(1.1);
+        end
+
         function testputgetObjectRelative(testCase)
             write(testCase.logObj,'debug','Testing testputgetObjectRelative');
             % Create the client and initialize
@@ -428,15 +470,15 @@ classdef testClient < matlab.unittest.TestCase
         %
         % function testCanonicalGrantee(testCase)
         %     write(testCase.logObj,'debug','Testing testCanonicalGrantee');
-        % 
+        %
         %     % Configure the canonical form of the grantee
         %     canonicalGrantee = 'aa64f60[ R E D A C T E D ]f0331199e0';
-        % 
+        %
         %     % Create the client and initialize
         %     s3 = aws.s3.Client();
         %     s3.useCredentialsProviderChain = false;
         %     s3.initialize();
-        % 
+        %
         %     % Create a CanonicalGrantee object and test its type
         %     canonical_obj = aws.s3.CanonicalGrantee(canonicalGrantee);
         %     testCase.verifyEqual(class(canonical_obj.Handle),'com.amazonaws.services.s3.model.CanonicalGrantee');
@@ -564,7 +606,7 @@ classdef testClient < matlab.unittest.TestCase
             s3.createBucket(uniqName);
             s3.putObject(uniqName,tmpName);
 
-            initacl = s3.getObjectAcl(uniqName,tmpName);
+            initacl = s3.getObjectAcl(uniqName,tmpName); %#ok<NASGU>
 
             canonical_obj = aws.s3.CanonicalGrantee(owner.id);
             perm_enum = aws.s3.Permission('read');

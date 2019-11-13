@@ -10,7 +10,7 @@ git clone --recursive https://github.com/mathworks-ref-arch/mathworks-aws-suppor
 ### Build the AWS SDK for Java components
 The MATLAB code uses the AWS SDK for Java and can be built using:
 ```bash
-cd Software/Java
+cd matlab-aws-s3/Software/Java
 mvn clean package
 ```
 More details can be found here: [Build](Rebuild.md)

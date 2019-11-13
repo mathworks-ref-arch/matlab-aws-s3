@@ -10,8 +10,7 @@ This documentation set covers security in the following sections:
 * Setting an ACL on an object
 * Using a canned ACL with a bucket
 
-
-## [Encryption Support](EncryptionSupport.md)   
+## [Encryption at Rest Support](EncryptionSupport.md)   
 * Supported encryption schemes
 * Encryption scope
 * Encryption key generation operations
@@ -19,13 +18,17 @@ This documentation set covers security in the following sections:
 * Misc. encryption scheme information
 * Encryption examples
 
-
 ## [Authentication](Authentication.md)   
-* Using credentials provider chain
+* Using the credentials provider chain
 * Using a custom stored credentials file
 
+## [SSL Certificates](BasicUsage.md)   
+* Disabling SSL Certificate checking
+
+## [Using Proxies](GettingStarted.md)
+* Network proxy configuration
+
+Report suspected security issues to `security@mathworks.com`. For further details see the [SECURITY.md](../SECURITY.md) file at the top level of this project.
 
 
-------------
-
-[//]: #  (Copyright 2018 The MathWorks, Inc.)
+[//]: #  (Copyright 2018-2019 The MathWorks, Inc.)

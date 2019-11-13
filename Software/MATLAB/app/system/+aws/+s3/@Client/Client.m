@@ -130,7 +130,7 @@ classdef Client < aws.Object
     %       s3.initialize();
     %
 
-    % Copyright 2018 The MathWorks, Inc.
+    % Copyright 2018-2019 The MathWorks, Inc.
 
     properties
         % default to no encryption
@@ -142,8 +142,13 @@ classdef Client < aws.Object
         CSEAMKKeyPair;
         CSESMKKey;
         KMSCMKKeyID;
+        % clientConfiguration object is used for certain client properties,
+        % e.g. proxy handling
         clientConfiguration = aws.ClientConfiguration();
+        % endpoint for the service, this is changed for example if connecting to
+        % a non AWS S3 implementation
         endpointURI = matlab.net.URI();
+        pathStyleAccessEnabled = false;
     end
 
     methods

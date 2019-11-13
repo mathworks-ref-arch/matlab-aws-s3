@@ -11,9 +11,8 @@ Please see: https://www.mathworks.com/support/requirements/matlab-system-require
 It has been designed to work on the following environments using release 2017a or later:
 
 * [MATLAB Desktop](MATLABDesktop.md)
-* [MATLAB Production Server](MATLABProductionServer.md)
-* [MATLAB Distributed Computing Server](MATLABDistibuted.md)
-* [MATLAB Runtime](MATLABRuntime.md)
+* [MATLAB Production Server & Runtime](MATLABProductionServer.md)
+* [MATLAB Parallel Server](MATLABDistributed.md)
 
 -----------
 

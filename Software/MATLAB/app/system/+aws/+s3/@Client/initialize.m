@@ -9,7 +9,7 @@ function initStat = initialize(obj, varargin)
 %       s3.intialize();
 %
 
-% Copyright 2017 The MathWorks, Inc.
+% Copyright 2017-2019 The MathWorks, Inc.
 
 %% Imports
 % Exceptions
@@ -144,23 +144,39 @@ end
 %% Initialize a handle to the S3 client
 switch obj.encryptionScheme
 case {aws.s3.EncryptionScheme.NOENCRYPTION, aws.s3.EncryptionScheme.SSEC, aws.s3.EncryptionScheme.SSEKMS, aws.s3.EncryptionScheme.SSES3}
-        builderH = AmazonS3ClientBuilder.standard().withCredentials(awsCredentials).withClientConfiguration(obj.clientConfiguration.Handle);
+        if obj.pathStyleAccessEnabled
+            builderH = AmazonS3ClientBuilder.standard().withCredentials(awsCredentials).withClientConfiguration(obj.clientConfiguration.Handle).withPathStyleAccessEnabled(java.lang.Boolean(true));
+        else
+            builderH = AmazonS3ClientBuilder.standard().withCredentials(awsCredentials).withClientConfiguration(obj.clientConfiguration.Handle);
+        end
 
     case aws.s3.EncryptionScheme.CSEAMK
         encryptionMaterials = EncryptionMaterials(obj.CSEAMKKeyPair);
         encryptionMaterialsP = StaticEncryptionMaterialsProvider(encryptionMaterials);
-        builderH = AmazonS3EncryptionClientBuilder.standard().withCredentials(awsCredentials).withEncryptionMaterials(encryptionMaterialsP).withClientConfiguration(obj.clientConfiguration.Handle);
+        if obj.pathStyleAccessEnabled
+            builderH = AmazonS3EncryptionClientBuilder.standard().withCredentials(awsCredentials).withEncryptionMaterials(encryptionMaterialsP).withClientConfiguration(obj.clientConfiguration.Handle).withPathStyleAccessEnabled(java.lang.Boolean(true));
+        else
+            builderH = AmazonS3EncryptionClientBuilder.standard().withCredentials(awsCredentials).withEncryptionMaterials(encryptionMaterialsP).withClientConfiguration(obj.clientConfiguration.Handle);
+        end
 
     case aws.s3.EncryptionScheme.CSESMK
         encryptionMaterials = EncryptionMaterials(obj.CSESMKKey);
         encryptionMaterialsP = StaticEncryptionMaterialsProvider(encryptionMaterials);
-        builderH = AmazonS3EncryptionClientBuilder.standard().withCredentials(awsCredentials).withEncryptionMaterials(encryptionMaterialsP).withClientConfiguration(obj.clientConfiguration.Handle);
+        if obj.pathStyleAccessEnabled
+            builderH = AmazonS3EncryptionClientBuilder.standard().withCredentials(awsCredentials).withEncryptionMaterials(encryptionMaterialsP).withClientConfiguration(obj.clientConfiguration.Handle).withPathStyleAccessEnabled(java.lang.Boolean(true));
+        else
+            builderH = AmazonS3EncryptionClientBuilder.standard().withCredentials(awsCredentials).withEncryptionMaterials(encryptionMaterialsP).withClientConfiguration(obj.clientConfiguration.Handle);
+        end
 
     case aws.s3.EncryptionScheme.KMSCMK
         encryptionMaterialsP = KMSEncryptionMaterialsProvider(obj.KMSCMKKeyID);
         awsKmsRegion = Region.getRegion(awsRegion);
         cryptoconfig = CryptoConfiguration().withAwsKmsRegion(awsKmsRegion);
-        builderH = AmazonS3EncryptionClientBuilder.standard().withCredentials(awsCredentials).withEncryptionMaterials(encryptionMaterialsP).withCryptoConfiguration(cryptoconfig).withClientConfiguration(obj.clientConfiguration.Handle);
+        if obj.pathStyleAccessEnabled
+            builderH = AmazonS3EncryptionClientBuilder.standard().withCredentials(awsCredentials).withEncryptionMaterials(encryptionMaterialsP).withCryptoConfiguration(cryptoconfig).withClientConfiguration(obj.clientConfiguration.Handle).withPathStyleAccessEnabled(java.lang.Boolean(true));
+        else
+            builderH = AmazonS3EncryptionClientBuilder.standard().withCredentials(awsCredentials).withEncryptionMaterials(encryptionMaterialsP).withClientConfiguration(obj.clientConfiguration.Handle);
+        end
 
     otherwise
         write(logObj,'error',['Unknown encryption scheme: ',obj.encryptionScheme]);
@@ -168,13 +184,12 @@ case {aws.s3.EncryptionScheme.NOENCRYPTION, aws.s3.EncryptionScheme.SSEC, aws.s3
 end
 
 
-%% configure the Endpoint if set else just set the region
+%% configure the endpoint if set else just set the region
 if isempty(obj.endpointURI.Host)
     % set the region directly if not using a custom endpoint otherwise the region
     % is configured as part of the endpoint configuration
     builderH.setRegion(awsRegion.getName);
 else
-    % write(logObj,'verbose','Configuring Endpoint');
     % if the URI has a path we don't include it in the endpoint as this is likely bucket name
     endpointHostPort = [char(obj.endpointURI.Scheme) '://' char(obj.endpointURI.EncodedAuthority)];
     endpointRegion = char(awsRegion.getName);
