@@ -42,7 +42,7 @@ end
 objectSummaries = objectListing.getObjectSummaries();
 
 % if the number of objects exceeds 1000 then the listing will be flagged as
-% turncated and we get the next batch and so on
+% truncated and we get the next batch and so on
 while objectListing.isTruncated()
     objectListing = obj.Handle.listNextBatchOfObjects(objectListing);
     objectSummaries.addAll(objectListing.getObjectSummaries());

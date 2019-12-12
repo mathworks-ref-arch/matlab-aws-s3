@@ -1,6 +1,9 @@
 # MATLAB Interface *for AWS S3*
 # Release Notes
 
+## Release 0.5.7 (9th December 2019)
+* Added maven-compiler-plugin to pom.xml
+
 ## Release 0.5.6 (5th November 2019)
 * Added ability to enable Path Style Access
 * Added SSL Certificate checking documentation
