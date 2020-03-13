@@ -1,6 +1,10 @@
 # MATLAB Interface *for AWS S3*
 # Release Notes
 
+## Release 0.5.8 (5th March 2020)
+* Updated security details
+* Updated License
+
 ## Release 0.5.7 (9th December 2019)
 * Added maven-compiler-plugin to pom.xml
 

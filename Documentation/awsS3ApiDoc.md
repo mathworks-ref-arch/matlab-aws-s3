@@ -34,6 +34,10 @@
     email_addr_grantee = aws.s3.EmailAddressGrantee('joe.blog@example.com');
     my_acl.grantPermission(email_addr_grantee, my_perm);
 
+    Documentation for aws.s3.AccessControlList
+       doc aws.s3.AccessControlList
+
+
 
 
 ```
@@ -131,6 +135,10 @@
   GroupGrantee.AllUsers group grantee is granted Permission.Read and
   Permission.Write access.
 
+    Documentation for aws.s3.CannedAccessControlList
+       doc aws.s3.CannedAccessControlList
+
+
 
 
 ```
@@ -155,6 +163,10 @@
     my_perm = aws.s3.Permission('read');
     my_acl = aws.s3.AccessControlList();
  	my_acl.grantPermission(canonicalgrantee, my_perm);
+
+    Documentation for aws.s3.CanonicalGrantee
+       doc aws.s3.CanonicalGrantee
+
 
 
 
@@ -296,6 +308,10 @@
         s3 = aws.s3.Client();
         s3.endpointURI = 'https//mylocals3.example.com';
         s3.initialize();
+
+    Documentation for aws.s3.Client
+       doc aws.s3.Client
+
 
 
 
@@ -767,6 +783,10 @@
     my_perm = s3.Permission('read');
     my_acl.grantPermission(emailaddrgrantee, my_perm);
 
+    Documentation for aws.s3.EmailAddressGrantee
+       doc aws.s3.EmailAddressGrantee
+
+
 
 
 ```
@@ -787,6 +807,10 @@
     SSEC      : sever side encryption with a customer supplied key
     SSEKMS    : server side encryption using the Key Management Service
     SSES3     : server side encryption using S3 managed encryption keys
+
+    Documentation for aws.s3.EncryptionScheme
+       doc aws.s3.EncryptionScheme
+
 
 
 
@@ -810,6 +834,10 @@
      myGrant = aws.s3.Grant(myGrantee, myPermission);
      % or
      myGrant = aws.s3.Grant(myJavaGranteeObject);
+
+    Documentation for aws.s3.Grant
+       doc aws.s3.Grant
+
 
 
 
@@ -859,6 +887,10 @@
   In practice values map to URLs that define them, e.g.
   AllUsers maps to http://acs.amazonaws.com/groups/global/AllUsers
 
+    Documentation for aws.s3.GroupGrantee
+       doc aws.s3.GroupGrantee
+
+
 
 
 ```
@@ -906,6 +938,10 @@
     ans =
       1x4 cell array
         {'file'}    {'myMDValue1'}    {'myMDValue2'}    {'myMDValue3'}
+
+    Documentation for aws.s3.ObjectMetadata
+       doc aws.s3.ObjectMetadata
+
 
 
 
@@ -1000,6 +1036,10 @@
     owner = aws.s3.Owner();
     owner.setDisplayName('my_disp_name');
     owner.setId('1234567890abcdef');
+
+    Documentation for aws.s3.Owner
+       doc aws.s3.Owner
+
 
 
 
@@ -1100,6 +1140,10 @@
                    ACL permissions. Allows grantee the READ, READ_ACP, and
                    WRITE_ACP permissions on the object.
 
+    Documentation for aws.s3.Permission
+       doc aws.s3.Permission
+
+
 
 
 ```
@@ -1154,9 +1198,35 @@
     s3.clientConfiguration.setProxyPort(8080);
     s3.initialize();
 
-    Reference page in Doc Center
+    Documentation for aws.ClientConfiguration
        doc aws.ClientConfiguration
 
+
+
+
+```
+### @ClientConfiguration/getNonProxyHosts.m
+```notalanguage
+  GETNONPROXYHOSTS Sets optional hosts accessed without going through the proxy
+  Returns either the nonProxyHosts set on this object, or if not provided,
+  returns the value of the Java system property http.nonProxyHosts.
+  Result is returned as a character vector.
+ 
+  Note the following caveat from the AWS DynamoDB documentation:
+ 
+  We still honor this property even when getProtocol() is https, see
+  http://docs.oracle.com/javase/7/docs/api/java/net/doc-files/net-properties.html
+  This property is expected to be set as a pipe separated list. If neither are
+  set, returns the value of the environment variable NO_PROXY/no_proxy.
+  This environment variable is expected to be set as a comma separated list.
+
+
+
+```
+### @ClientConfiguration/setNonProxyHosts.m
+```notalanguage
+  SETNONPROXYHOSTS Sets optional hosts accessed without going through the proxy
+  Hosts should be specified as a character vector.
 
 
 
@@ -1284,7 +1354,7 @@
 ```notalanguage
   OBJECT Root object for all the AWS SDK objects
 
-    Reference page in Doc Center
+    Documentation for aws.Object
        doc aws.Object
 
 
