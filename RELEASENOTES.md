@@ -1,7 +1,7 @@
 # MATLAB Interface *for AWS S3*
 # Release Notes
 ## Release 0.5.9 (13th October 2020)
-* Fixed security vulnerability (see pull request #4).
+* Bumped junit version
 
 ## Release 0.5.8 (5th March 2020)
 * Updated security details
