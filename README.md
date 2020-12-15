@@ -1,6 +1,6 @@
-# MATLAB® Interface *for AWS S3™*
+# MATLAB® Interface *for Amazon S3™*
 
-This is a MATLAB® interface for the Amazon Web Services S3™ service. This is a low-level, general interface that can be customized if the higher-level interface as provided in MATLAB does not support your needs. see here https://www.mathworks.com/help/matlab/import_export/work-with-remote-data.html for more details on what is provided in MATLAB.
+This is a MATLAB® interface for the Amazon S3™ service. This is a low-level, general interface that can be customized if the higher-level interface as provided in MATLAB does not support your needs. see here https://www.mathworks.com/help/matlab/import_export/work-with-remote-data.html for more details on what is provided in MATLAB.
 
 ## Requirements
 ### MathWorks products
@@ -79,7 +79,7 @@ The interface supports a number of S3 features including credential-free authent
 4. [MATLAB Distributed Computing Server™](https://www.mathworks.com/products/distriben.html) (R2017a or later)
 
 ## License
-The license for the MATLAB Interface *for AWS S3* is available in the [LICENSE.md](LICENSE.md) file in this GitHub repository. This package uses certain third-party content which is licensed under separate license agreements. See the [pom.xml](Software/Java/pom.xml) file for third-party software downloaded at build time.
+The license for the MATLAB Interface *for Amazon S3* is available in the [LICENSE.md](LICENSE.md) file in this GitHub repository. This package uses certain third-party content which is licensed under separate license agreements. See the [pom.xml](Software/Java/pom.xml) file for third-party software downloaded at build time.
 
 ## Enhancement Request
 Provide suggestions for additional features or capabilities using the following link:   
