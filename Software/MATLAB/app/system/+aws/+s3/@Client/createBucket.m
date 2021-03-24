@@ -1,5 +1,5 @@
 function [altered, nameUsed] = createBucket(obj, bucketName)
-% CREATEBUCKET Method to create a bucket on the AWS S3 service
+% CREATEBUCKET Method to create a bucket on the Amazon S3 service
 % Create a bucket on the S3 service
 %
 %   s3 = aws.s3.Client();
@@ -24,7 +24,7 @@ function [altered, nameUsed] = createBucket(obj, bucketName)
 % to S3.
 
 
-% Copyright 2018 The MathWorks, Inc.
+% Copyright 2018-2021 The MathWorks, Inc.
 
 logObj = Logger.getLogger();
 

@@ -1,5 +1,5 @@
 function putObject(obj, varargin)
-% PUTOBJECT uploads an object to an AWS S3 bucket
+% PUTOBJECT uploads an object to an Amazon S3 bucket
 % Uploads a file as an object to the specified Amazon S3 bucket.
 %
 % Examples:
@@ -49,7 +49,7 @@ function putObject(obj, varargin)
 %  s3.putObject('myBucket', 'myObject.mat', 'myObjectName.mat',myObjectMetadata);
 %
 
-% Copyright 2017 The MathWorks, Inc.
+% Copyright 2017-2021 The MathWorks, Inc.
 
 %% Imports
 import java.io.File

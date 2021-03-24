@@ -1,6 +1,6 @@
 # MATLAB® Interface *for Amazon S3™*
 
-This is a MATLAB® interface for the Amazon S3™ service. This is a low-level, general interface that can be customized if the higher-level interface as provided in MATLAB does not support your needs. see here https://www.mathworks.com/help/matlab/import_export/work-with-remote-data.html for more details on what is provided in MATLAB.
+This is a MATLAB® interface for the Amazon S3™ service. This is a low-level interface. MATLAB IO operations increasingly support access to S3 via a higher-level interface, e.g. the ```dir``` command supports accessing remote data; [https://www.mathworks.com/help/matlab/ref/dir.html](https://www.mathworks.com/help/matlab/ref/dir.html), [https://www.mathworks.com/help/matlab/import_export/work-with-remote-data.html](https://www.mathworks.com/help/matlab/import_export/work-with-remote-data.html). Where MATLAB's higher-level interface supports the required operations it is recommended to use that.
 
 ## Requirements
 ### MathWorks products
@@ -13,7 +13,7 @@ This is a MATLAB® interface for the Amazon S3™ service. This is a low-level, 
 To build a required JAR file:   
 * [Maven](https://maven.apache.org/)
 * JDK 7
-* [AWS SDK for Java](https://aws.amazon.com/sdk-for-java/) (version 1.11.367 or later)
+* [AWS SDK for Java](https://aws.amazon.com/sdk-for-java/) (version 1.11.567 or later)
 
 ## Getting Started
 Please refer to the [Documentation](Documentation/README.md) to get started.
@@ -70,7 +70,7 @@ s3.deleteBucket(bucketName);
 s3.shutdown;
 ```
 
-The interface supports a number of S3 features including credential-free authentication using IAM when running on EC2™. Please consult the documentation for more details.
+The interface supports a number of Amazon S3 features including credential-free authentication using IAM when running on EC2™. Please consult the documentation for more details.
 
 ## Supported Products:
 1. [MATLAB](https://www.mathworks.com/products/matlab.html) (R2017a or later)

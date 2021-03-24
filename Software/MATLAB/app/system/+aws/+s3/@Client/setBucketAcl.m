@@ -10,9 +10,9 @@ function setBucketAcl(obj, bucketName, acl)
 % myCannedACL = aws.s3.CannedAccessControlList('AuthenticatedRead')
 % s3.setBucketAcl('com-example-testbucket',myCannedACL)
 %
-% See AWS S3 JDK SDK for a complete list of canned ACLs.
+% See Amazon S3 JDK SDK for a complete list of canned ACLs.
 
-% Copyright 2017 The MathWorks, Inc.
+% Copyright 2017-2021 The MathWorks, Inc.
 
 %% Imports
 import com.amazonaws.services.s3.model.AccessControlList

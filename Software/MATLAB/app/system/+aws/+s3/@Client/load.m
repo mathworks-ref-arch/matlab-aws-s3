@@ -1,5 +1,5 @@
 function S = load(obj, varargin)
-% LOAD, Method to load data from AWS S3 into the workspace
+% LOAD, Method to load data from Amazon S3 into the workspace
 % This method behaves similarly to the standard MATLAB load command in its
 % functional form. It reads back from a specific object in a given bucket.It
 % returns the results in a structure with the given variable names.
@@ -19,7 +19,7 @@ function S = load(obj, varargin)
 % Using load to load a subset of a file will not improve access time as the
 % complete file is downloaded.
 
-% Copyright 2017 The MathWorks, Inc.
+% Copyright 2017-2021 The MathWorks, Inc.
 
 %% Imports
 import com.amazonaws.services.s3.model.GetObjectRequest;

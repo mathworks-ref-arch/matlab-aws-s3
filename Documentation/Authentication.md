@@ -79,7 +79,7 @@ exists on the MATLAB path. The contents of this file need to be of the format:
     "region" : "us-west-1"
 }
 ```
-Once configured, this package is ready to connect to AWS S3. The order of the credential file entries is not significant.
+Once configured, this package is ready to connect to Amazon S3. The order of the credential file entries is not significant.
 
 
 ## Using temporary security credentials

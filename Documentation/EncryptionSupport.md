@@ -1,6 +1,6 @@
 # Encryption Support
 
-This document describes the types of encryption supported by AWS S3™ using this package in addition to other related information.
+This document describes the types of encryption supported by Amazon S3™ using this package in addition to other related information.
 
 ## Supported encryption schemes
 
@@ -31,7 +31,7 @@ In all supported cases an individual scheme applies at the client level, i.e. on
 
 | Scheme name | Client / Server-side encryption | Per Client / Per Operation | Comment |
 |--------|:---------:|:--------:|--------------------------------------------|
-| KMSCMK | Client-side | Client | Uses a Key ID to select a key that is used on the client side by the AWS S3 SDK but managed by KMS. |
+| KMSCMK | Client-side | Client | Uses a Key ID to select a key that is used on the client side by the Amazon S3 SDK but managed by KMS. |
 |CSESMK | Client-side | Client | A symmetric customer key of type `javax.crypto.spec.SecretKeySpec` is required when initializing a client. `CSESymmetricMasterKey()` can be used to generate such a key. |
 | CSEAMK | Client-side | Client | An asymmetric customer key pair of type `java.security.KeyPair` is required when initializing a client. `CSEasymmetricMasterKey()` can be used to generate such a key pair. |
 | SSES3 | Server-side | Client | Can be more cost effective than KMS if KMS functionality is not required. |
@@ -50,7 +50,7 @@ It is advised to carry out all related communications over HTTPS connections rat
 In practice, it is expected that normally keys will be sourced from and managed by other 3rd party software with appropriate precautions in place.
 
 ## Server-side Encryption (SSE)
-For encryption options that leverage the server-side capabilities of AWS S3, the supported schemes can take the following values for using server-side encryption:
+For encryption options that leverage the server-side capabilities of Amazon S3, the supported schemes can take the following values for using server-side encryption:
 * SSEC (with Customer Key)
 * SSEKMS (with Key Management Service)
 * SSES3 (with S3 managed Keys)
@@ -234,4 +234,4 @@ Relevant Links:
 * <https://d0.awsstatic.com/whitepapers/aws-security-best-practices.pdf>
 
 
-[//]: #  (Copyright 2018 The MathWorks, Inc.)
+[//]: #  (Copyright 2018-2021 The MathWorks, Inc.)

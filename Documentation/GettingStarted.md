@@ -4,7 +4,6 @@ Once this package is installed and authentication is in place one can begin work
 ```
 % Create the client called s3 and initialize it to not use encryption when storing data
 s3 = aws.s3.Client();
-s3.useCredentialsProviderChain = false;
 s3.initialize();
 
 % create a bucket, note AWS provides naming guidelines
@@ -70,7 +69,7 @@ Path elements on the endpoint URI are removed by default to avoid bucket names b
 
 
 ## Path Style Access
-In some cases e.g. for certain non AWS S3 services it may be necessary to configures the client to use path-style access for all requests. AWS's S3 service supports virtual-hosted-style and path-style access in all Regions. The path-style syntax, however, requires that you use the region-specific endpoint when attempting to access a bucket. Note, AWS are in the process of deprecating the use of Path Style Access. The default behavior is to detect which access style to use based on the configured endpoint (an IP will result in path-style access) and the bucket being accessed (some buckets are not valid DNS names). However with non AWS endpoints it is often necessary to explicitly enable the use of Path Style Access, e.g. when connecting to a NetApp StorageGRID or MINIO systems. Setting ```pathStyleAccessEnabled``` client property to true will result in path-style access being used for all requests. It should be set prior to calling ```initialize()```.
+In some cases e.g. for certain non Amazon S3 services it may be necessary to configures the client to use path-style access for all requests. AWS's S3 service supports virtual-hosted-style and path-style access in all Regions. The path-style syntax, however, requires that you use the region-specific endpoint when attempting to access a bucket. Note, AWS are in the process of deprecating the use of Path Style Access. The default behavior is to detect which access style to use based on the configured endpoint (an IP will result in path-style access) and the bucket being accessed (some buckets are not valid DNS names). However with non AWS endpoints it is often necessary to explicitly enable the use of Path Style Access, e.g. when connecting to a NetApp StorageGRID or MINIO systems. Setting ```pathStyleAccessEnabled``` client property to true will result in path-style access being used for all requests. It should be set prior to calling ```initialize()```.
 ```
 s3 = aws.s3.Client();
 s3.endpointURI = matlab.net.URI('https://mycustomendpoint.example.com');
@@ -120,4 +119,4 @@ client.clientConfiguration.setProxyPassword('myProxyPassword');
 If a proxy server is being used, then the proxy values need to be configured as shown, this should be done before the client is initialized.
 
 
-[//]: #  (Copyright 2018-2019 The MathWorks, Inc.)
+[//]: #  (Copyright 2018-2021 The MathWorks, Inc.)

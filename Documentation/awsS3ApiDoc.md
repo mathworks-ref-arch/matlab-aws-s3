@@ -1,7 +1,7 @@
-# MATLAB Interface *for AWS S3* API documentation
+# MATLAB Interface *for Amazon S3* API documentation
 
 
-## AWS S3 Interface Objects and Methods:
+## Amazon S3 Interface Objects and Methods:
 * @AccessControlList
 * @CannedAccessControlList
 * @CanonicalGrantee
@@ -303,7 +303,7 @@
  
    Alternate endpointURI:
  
-  If an alternative endpoint is required, e.g. if using an non-AWS S3
+  If an alternative endpoint is required, e.g. if using an non-Amazon S3
   service one can specified it as follows:
         s3 = aws.s3.Client();
         s3.endpointURI = 'https//mylocals3.example.com';
@@ -318,7 +318,7 @@
 ```
 ### @Client/createBucket.m
 ```notalanguage
-  CREATEBUCKET Method to create a bucket on the AWS S3 service
+  CREATEBUCKET Method to create a bucket on the Amazon S3 service
   Create a bucket on the S3 service
  
     s3 = aws.s3.Client();
@@ -347,7 +347,7 @@
 ```
 ### @Client/deleteBucket.m
 ```notalanguage
-  DELETEBUCKET Method to delete an AWS S3 bucket
+  DELETEBUCKET Method to delete an Amazon S3 bucket
   Delete a bucket on the S3 service. For example:
  
     s3 = aws.s3.Client();
@@ -459,7 +459,7 @@
 ```
 ### @Client/generateSSECKey.m
 ```notalanguage
-  GENERATESECRETKEY Method to generate a secret key for use with AWS S3
+  GENERATESECRETKEY Method to generate a secret key for use with Amazon S3
   The method generates a key that is suitable for use with server side
   encryption using a client side provided and managed key. Only AES 256 bit
   encryption is supported.
@@ -472,7 +472,7 @@
 ```
 ### @Client/getBucketAcl.m
 ```notalanguage
-  GETBUCKETACL Method to get the ACL of an existing AWS S3 bucket
+  GETBUCKETACL Method to get the ACL of an existing Amazon S3 bucket
   Get the ACL for a bucket, the ACL can then be inspected or applied to
   another bucket. Depending on the permissions of the bucket it is possible
   that an empty ACL with no properties will be returned, e.g. if the bucket
@@ -485,7 +485,7 @@
 ```
 ### @Client/getObject.m
 ```notalanguage
-  GETOBJECT Method to retrieve a file object from AWS S3
+  GETOBJECT Method to retrieve a file object from Amazon S3
   Download an object from a given bucket with a given key name. If
   downloading a file it will be saved using keyName as the filename
   or optionally a specified filename.
@@ -526,7 +526,7 @@
 ```
 ### @Client/getObjectAcl.m
 ```notalanguage
-  GETOBJECTACL Method to get the ACL of an existing AWS S3 object
+  GETOBJECTACL Method to get the ACL of an existing Amazon S3 object
   Get the ACL for the object, the ACL can then be inspected or applied to
   another object
  
@@ -537,7 +537,7 @@
 ```
 ### @Client/getObjectMetadata.m
 ```notalanguage
-  GETOBJECTMETADATA Method to retrieve an AWS S3 object's metadata
+  GETOBJECTMETADATA Method to retrieve an Amazon S3 object's metadata
   Download an object's metadata without downloading the object itself
  
   Examples:
@@ -607,7 +607,7 @@
 ```
 ### @Client/load.m
 ```notalanguage
-  LOAD, Method to load data from AWS S3 into the workspace
+  LOAD, Method to load data from Amazon S3 into the workspace
   This method behaves similarly to the standard MATLAB load command in its
   functional form. It reads back from a specific object in a given bucket.It
   returns the results in a structure with the given variable names.
@@ -632,7 +632,7 @@
 ```
 ### @Client/putObject.m
 ```notalanguage
-  PUTOBJECT uploads an object to an AWS S3 bucket
+  PUTOBJECT uploads an object to an Amazon S3 bucket
   Uploads a file as an object to the specified Amazon S3 bucket.
  
   Examples:
@@ -686,7 +686,7 @@
 ```
 ### @Client/save.m
 ```notalanguage
-  SAVE Method to save files or variables to an AWS S3 bucket
+  SAVE Method to save files or variables to an Amazon S3 bucket
   A higher level method that uses the built in save syntax to save data to an
   S3 bucket. Save can be used very much like the functional form of the built-in
   save command with two exceptions:
@@ -712,7 +712,7 @@
   myCannedACL = aws.s3.CannedAccessControlList('AuthenticatedRead')
   s3.setBucketAcl('com-example-testbucket',myCannedACL)
  
-  See AWS S3 JDK SDK for a complete list of canned ACLs.
+  See Amazon S3 JDK SDK for a complete list of canned ACLs.
 
 
 
@@ -731,7 +731,7 @@
   myCannedACL = aws.s3.CannedAccessControlList('AuthenticatedRead')
   s3.setObjectAcl('com-mathworks-testbucket','MyData.mat',myCannedACL)
  
-  See AWS S3 JDK SDK for a complete list of canned ACLs.
+  See Amazon S3 JDK SDK for a complete list of canned ACLs.
 
 
 
@@ -755,7 +755,7 @@
 ```
 ### @Client/shutdown.m
 ```notalanguage
-  SHUTDOWN Method to shutdown an AWS s3 client and release resources
+  SHUTDOWN Method to shutdown an Amazon s3 client and release resources
   This method should be called to cleanup a client which is no longer
   required.
  
@@ -1150,7 +1150,7 @@
 
 ------
 
-## AWS S3 Interface Related Functions:
+## Amazon S3 Interface Related Functions:
 ### functions/splitName.m
 ```notalanguage
   SPLITNAME Splits an s3 name into bucket and a list of names
@@ -1212,7 +1212,7 @@
   returns the value of the Java system property http.nonProxyHosts.
   Result is returned as a character vector.
  
-  Note the following caveat from the AWS DynamoDB documentation:
+  Note the following caveat from the Amazon DynamoDB documentation:
  
   We still honor this property even when getProtocol() is https, see
   http://docs.oracle.com/javase/7/docs/api/java/net/doc-files/net-properties.html
@@ -1548,4 +1548,4 @@
 
 ------------    
 
-[//]: # (Copyright 2019 The MathWorks, Inc.)
+[//]: # (Copyright 2017-2021 The MathWorks, Inc.)

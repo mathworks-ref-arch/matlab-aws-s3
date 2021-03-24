@@ -1,5 +1,5 @@
 function save(obj, varargin)
-% SAVE Method to save files or variables to an AWS S3 bucket
+% SAVE Method to save files or variables to an Amazon S3 bucket
 % A higher level method that uses the built in save syntax to save data to an
 % S3 bucket. Save can be used very much like the functional form of the built-in
 % save command with two exceptions:

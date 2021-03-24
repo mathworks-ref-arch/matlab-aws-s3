@@ -1,5 +1,10 @@
-# MATLAB Interface *for AWS S3*
+# MATLAB Interface *for Amazon S3*
 # Release Notes
+
+## Release 0.5.10 (22nd Mar 2021)
+* Updated to support integration testing
+* Documentation improvements
+
 ## Release 0.5.9 (13th Oct 2020)
 * Bumped junit version
 
@@ -139,4 +144,4 @@ Initial release with support for:
 * AWS Command Line Interface
 * S3
 
-[//]: #  (Copyright 2018-2019 The MathWorks, Inc.)
+[//]: #  (Copyright 2018-2021 The MathWorks, Inc.)

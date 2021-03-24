@@ -1,12 +1,12 @@
 function acl = getObjectAcl(obj, bucketName, keyName)
-% GETOBJECTACL Method to get the ACL of an existing AWS S3 object
+% GETOBJECTACL Method to get the ACL of an existing Amazon S3 object
 % Get the ACL for the object, the ACL can then be inspected or applied to
 % another object
 %
 %   s3.getObjectAcl(bucketName, keyName);
 %
 
-% Copyright 2017 The MathWorks, Inc.
+% Copyright 2017-2021 The MathWorks, Inc.
 %% Imports
 import com.amazonaws.services.s3.model.AccessControlList
 

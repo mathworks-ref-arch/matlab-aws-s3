@@ -13,7 +13,7 @@ classdef testCrypto < matlab.unittest.TestCase
     %
     % The test suite exercises the basic operations on the S3 Client.
 
-    % Copyright 2017 The MathWorks, Inc.
+    % Copyright 2017-2021 The MathWorks, Inc.
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% Please add test cases below
@@ -40,7 +40,11 @@ classdef testCrypto < matlab.unittest.TestCase
             write(testCase.logObj,'debug','Testing SSES3');
             s3 = aws.s3.Client();
             s3.encryptionScheme = 'SSES3';
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
 
             % create a small block of data
@@ -73,7 +77,11 @@ classdef testCrypto < matlab.unittest.TestCase
             % should be decrypted by default as default key was used to store it
             write(testCase.logObj,'debug','Redownload with no decryption');
             s3b = aws.s3.Client();
-            s3b.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3b.useCredentialsProviderChain = false;
+            else
+                s3b.useCredentialsProviderChain = true;
+            end
             s3b.initialize();
             delete(plainfile);
             clear 'x';
@@ -99,7 +107,11 @@ classdef testCrypto < matlab.unittest.TestCase
             write(testCase.logObj,'debug','Testing ssec');
 
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.encryptionScheme = 'ssec';
             s3.initialize();
 
@@ -235,7 +247,11 @@ classdef testCrypto < matlab.unittest.TestCase
             % use default key id
             write(testCase.logObj,'debug','using default master key');
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.encryptionScheme = 'ssekms';
             s3.initialize();
             write(testCase.logObj,'debug','Requesting that default master Key be used');
@@ -269,7 +285,11 @@ classdef testCrypto < matlab.unittest.TestCase
             % should be decrypted by default as default key was used to store it
             write(testCase.logObj,'debug','Redownload with no decryption');
             s3b = aws.s3.Client();
-            s3b.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3b.useCredentialsProviderChain = false;
+            else
+                s3b.useCredentialsProviderChain = true;
+            end
             s3b.initialize();
 
             delete(plainfile);
@@ -298,7 +318,11 @@ classdef testCrypto < matlab.unittest.TestCase
             % to replicate an observed user error
             write(testCase.logObj,'debug','using default master key');
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.encryptionScheme = 'ssekms';
             s3.initialize();
             write(testCase.logObj,'debug','Requesting that default master Key be used');
@@ -332,7 +356,11 @@ classdef testCrypto < matlab.unittest.TestCase
             % should be decrypted by default as default key was used to store it
             write(testCase.logObj,'debug','Redownload with no decryption');
             s3b = aws.s3.Client();
-            s3b.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3b.useCredentialsProviderChain = false;
+            else
+                s3b.useCredentialsProviderChain = true;
+            end
             s3b.initialize();
 
             delete(plainfile);
@@ -443,7 +471,11 @@ classdef testCrypto < matlab.unittest.TestCase
             % use non-default key id
             write(testCase.logObj,'debug','using Invalid key ID');
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.encryptionScheme = 'ssekms';
             s3.initialize();
             write(testCase.logObj,'debug','Requesting that an Invalid Key be used');
@@ -477,7 +509,11 @@ classdef testCrypto < matlab.unittest.TestCase
                 write(testCase.logObj,'debug','Testing csesmk');
 
                 s3 = aws.s3.Client();
-                s3.useCredentialsProviderChain = false;
+                if strcmpi(getenv('GITLAB_CI'), 'true')
+                    s3.useCredentialsProviderChain = false;
+                else
+                    s3.useCredentialsProviderChain = true;
+                end
                 s3.encryptionScheme = 'csesmk';
                 % Generate a symmetric 256 bit AES key.
                 s3.CSESMKKey = s3.generateCSESymmetricMasterKey('AES', 256);
@@ -507,7 +543,11 @@ classdef testCrypto < matlab.unittest.TestCase
                 % not readable
                 write(testCase.logObj,'debug','Redownload with no decryption');
                 s3b = aws.s3.Client();
-                s3b.useCredentialsProviderChain = false;
+                if strcmpi(getenv('GITLAB_CI'), 'true')
+                    s3b.useCredentialsProviderChain = false;
+                else
+                    s3b.useCredentialsProviderChain = true;
+                end
                 s3b.initialize();
                 delete(plainfile);
                 s3b.getObject(bucketname,plainfile);
@@ -516,7 +556,11 @@ classdef testCrypto < matlab.unittest.TestCase
                 % start a further client and download again this time using a
                 % new and thus different key
                 s3c = aws.s3.Client();
-                s3c.useCredentialsProviderChain = false;
+                if strcmpi(getenv('GITLAB_CI'), 'true')
+                    s3c.useCredentialsProviderChain = false;
+                else
+                    s3c.useCredentialsProviderChain = true;
+                end
                 s3c.encryptionScheme = 'csesmk';
 
                 % Generate another symmetric 256 bit AES key.
@@ -549,7 +593,11 @@ classdef testCrypto < matlab.unittest.TestCase
                 write(testCase.logObj,'debug','Testing cseamk');
 
                 s3 = aws.s3.Client();
-                s3.useCredentialsProviderChain = false;
+                if strcmpi(getenv('GITLAB_CI'), 'true')
+                    s3.useCredentialsProviderChain = false;
+                else
+                    s3.useCredentialsProviderChain = true;
+                end
                 s3.encryptionScheme = 'cseamk';
                 % Generate an asymmetric 1024 bit RSA key pair
                 s3.CSEAMKKeyPair = s3.generateCSEAsymmetricMasterKey(1024);
@@ -579,7 +627,11 @@ classdef testCrypto < matlab.unittest.TestCase
                 % not readable
                 write(testCase.logObj,'debug','Redownload with no decryption');
                 s3b = aws.s3.Client();
-                s3b.useCredentialsProviderChain = false;
+                if strcmpi(getenv('GITLAB_CI'), 'true')
+                    s3b.useCredentialsProviderChain = false;
+                else
+                    s3b.useCredentialsProviderChain = true;
+                end
                 s3b.initialize();
                 delete(plainfile);
                 s3b.getObject(bucketname,plainfile);
@@ -588,7 +640,11 @@ classdef testCrypto < matlab.unittest.TestCase
                 % start a further client and download again this time using a
                 % new and thus different key
                 s3c = aws.s3.Client();
-                s3c.useCredentialsProviderChain = false;
+                if strcmpi(getenv('GITLAB_CI'), 'true')
+                    s3c.useCredentialsProviderChain = false;
+                else
+                    s3c.useCredentialsProviderChain = true;
+                end
                 s3c.encryptionScheme = 'cseamk';
 
                 % Generate another asymmetric 1024 bit RSA key.
@@ -628,7 +684,11 @@ classdef testCrypto < matlab.unittest.TestCase
 
                 % setup a client
                 clientAlice = aws.s3.Client();
-                clientAlice.useCredentialsProviderChain = false;
+                if strcmpi(getenv('GITLAB_CI'), 'true')
+                    clientAlice.useCredentialsProviderChain = false;
+                else
+                    clientAlice.useCredentialsProviderChain = true;
+                end
                 clientAlice.encryptionScheme = 'CSEAMK';
                 % Generate an asymmetric 1024 bit RSA key pair
                 myKeyPair = clientAlice.generateCSEAsymmetricMasterKey(1024);
@@ -642,7 +702,11 @@ classdef testCrypto < matlab.unittest.TestCase
                 % init client with only the public key
                 encryptOnlyPair = loadKeyPair('mypublic.key');
                 clientBob = aws.s3.Client();
-                clientBob.useCredentialsProviderChain = false;
+                if strcmpi(getenv('GITLAB_CI'), 'true')
+                    clientBob.useCredentialsProviderChain = false;
+                else
+                    clientBob.useCredentialsProviderChain = true;
+                end
                 clientBob.CSEAMKKeyPair = encryptOnlyPair;
                 clientBob.encryptionScheme = 'CSEAMK';
                 clientBob.initialize();

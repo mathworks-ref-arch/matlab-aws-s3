@@ -1,10 +1,10 @@
-# MATLAB Interface *for AWS S3*
+# MATLAB Interface *for Amazon S3*
 
 Amazon™ Simple Storage Service, [Amazon S3™](https://aws.amazon.com/s3/), is an object storage service to store and retrieve any amount of data. It is designed to be highly reliable, and to scale beyond trillions of objects.
 
 S3 is often used as primary storage for cloud-native applications. S3 stores data as objects within buckets. An object consists of a file and optionally metadata. Upload the file to a bucket to store an object in S3. The permissions on the uploaded object or metadata can be set as well.
 
-Buckets are the containers for objects. Access to a bucket can be controlled. Additionally, access logs for the bucket and its objects can be viewed. Users can choose which region AWS S3 will store the bucket's contents.
+Buckets are the containers for objects. Access to a bucket can be controlled. Additionally, access logs for the bucket and its objects can be viewed. Users can choose which region Amazon S3 will store the bucket's contents.
 
 ## Contents
 1. [Installation](Installation.md)
@@ -25,6 +25,4 @@ Buckets are the containers for objects. Access to a bucket can be controlled. Ad
     b. [S3 API Documentation](awsS3ApiDoc.md)    
 
 
-------------
-
-[//]: #  (Copyright 2018 The MathWorks, Inc.)
+[//]: #  (Copyright 2018-2021 The MathWorks, Inc.)

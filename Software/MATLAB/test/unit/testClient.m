@@ -13,7 +13,7 @@ classdef testClient < matlab.unittest.TestCase
     %
     % The test suite exercises the basic operations on the S3 Client.
 
-    % Copyright 2017 The MathWorks, Inc.
+    % Copyright 2017-2021 The MathWorks, Inc.
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% Please add test cases below
@@ -49,7 +49,11 @@ classdef testClient < matlab.unittest.TestCase
             write(testCase.logObj,'debug','Testing testInitialization');
             % Create the client and initialize
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
 
             testCase.verifyNotEmpty(s3.Handle);
@@ -58,29 +62,36 @@ classdef testClient < matlab.unittest.TestCase
 
         function testInitializationOtherCredentials(testCase)
             write(testCase.logObj,'debug','Testing testInitializationOtherCredentials');
-            % Create the client and initialize using a temp copy of the
-            % credentials file in the same directory
-            currentCreds = which('credentials.json');
-            [pathstr,~,~] = fileparts(currentCreds);
+            if ~strcmpi(getenv('GITLAB_CI'), 'true')
+                warning('Skipping test when not in CI system');                
+            else% Create the client and initialize using a temp copy of the
+                % credentials file in the same directory
+                currentCreds = which('credentials.json');
+                [pathstr,~,~] = fileparts(currentCreds);
 
-            newCreds = fullfile(pathstr, 'testInitializationOtherCredentials.json');
-            copyfile(currentCreds,newCreds);
+                newCreds = fullfile(pathstr, 'testInitializationOtherCredentials.json');
+                copyfile(currentCreds,newCreds);
 
-            s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
-            s3.credentialsFilePath = newCreds;
-            s3.initialize();
+                s3 = aws.s3.Client();
+                s3.useCredentialsProviderChain = false;
+                s3.credentialsFilePath = newCreds;
+                s3.initialize();
 
-            testCase.verifyNotEmpty(s3.Handle);
-            delete(newCreds);
-            s3.shutdown();
+                testCase.verifyNotEmpty(s3.Handle);
+                delete(newCreds);
+                s3.shutdown();
+            end
         end
 
         function testlistBucketsBasic(testCase)
             write(testCase.logObj,'debug','Testing testlistBucketsBasic');
             % Create the client and initialize
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
 
             myTable = s3.listBuckets();
@@ -94,7 +105,11 @@ classdef testClient < matlab.unittest.TestCase
             % Create the client and initialize with a proxy that should
             % fail because it does not exist
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.clientConfiguration.setProxyHost('proxyHost','myproxy.example.com');
             s3.clientConfiguration.setProxyPort(8080);
             s3.initialize();
@@ -142,7 +157,11 @@ classdef testClient < matlab.unittest.TestCase
             % Create the client and initialize
 
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
 
             % Create a bucket
@@ -171,7 +190,11 @@ classdef testClient < matlab.unittest.TestCase
             write(testCase.logObj,'debug','Testing testdoesBucketExist');
             % Create the client and initialize
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
 
             % Create a bucket
@@ -195,7 +218,11 @@ classdef testClient < matlab.unittest.TestCase
             write(testCase.logObj,'debug','Testing testdeleteBucket');
             % Create the client and initialize
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
 
             % Create a bucket
@@ -225,8 +252,11 @@ classdef testClient < matlab.unittest.TestCase
             write(testCase.logObj,'debug','Testing testlistBuckets');
             % Create the client and initialize
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
-
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
 
             % create a bucket in order to have something to list
@@ -252,7 +282,11 @@ classdef testClient < matlab.unittest.TestCase
             write(testCase.logObj,'debug','Testing testputgetObject');
             % Create the client and initialize
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
 
             % create a small block of data and save it to a file
@@ -293,7 +327,11 @@ classdef testClient < matlab.unittest.TestCase
             % This test will fail when AWS stop supporting new buckets using
             % path style access
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.pathStyleAccessEnabled = true;
             s3.initialize();
 
@@ -333,8 +371,11 @@ classdef testClient < matlab.unittest.TestCase
             write(testCase.logObj,'debug','Testing testputgetObjectRelative');
             % Create the client and initialize
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
-
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
 
             % create a small block of data and save it to a file
@@ -373,8 +414,11 @@ classdef testClient < matlab.unittest.TestCase
             write(testCase.logObj,'debug','Testing testdoesObjectExist');
             % Create the client and initialize
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
-
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
 
             % create a small block of data and save it to a file
@@ -407,7 +451,11 @@ classdef testClient < matlab.unittest.TestCase
             write(testCase.logObj,'debug','Testing testgetObjectAcl');
             % Create the client and initialize
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
 
             % create a small block of data and save it to a file
@@ -443,7 +491,11 @@ classdef testClient < matlab.unittest.TestCase
             write(testCase.logObj,'debug','Testing testEmailAddressGrantee');
             % Create the client and initialize
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
 
             % Create a CanonicalGrantee object and test its type (RFC2606)
@@ -456,7 +508,11 @@ classdef testClient < matlab.unittest.TestCase
             write(testCase.logObj,'debug','Testing testGroupGrantee');
             % Create the client and initialize
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
 
             % Create a GroupGrantee object and test its type
@@ -489,7 +545,11 @@ classdef testClient < matlab.unittest.TestCase
             write(testCase.logObj,'debug','Testing testdeleteObject');
             % Create the client and initialize
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
 
             % create a small block of data and save it to a file
@@ -555,7 +615,11 @@ classdef testClient < matlab.unittest.TestCase
             write(testCase.logObj,'debug','Testing testlistObjects');
             % Create the client and initialize
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
 
             % create a small block of data and save it to a file
@@ -590,7 +654,11 @@ classdef testClient < matlab.unittest.TestCase
             write(testCase.logObj,'debug','Testing testsetObjectAcl');
             % Create the client and initialize
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
 
             % create a small block of data and save it to a file
@@ -645,7 +713,11 @@ classdef testClient < matlab.unittest.TestCase
             write(testCase.logObj,'debug','Testing testMetadata');
             % Create the client and initialize
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
 
             % create a small block of data and save it to a file

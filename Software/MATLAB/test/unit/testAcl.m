@@ -50,7 +50,11 @@ classdef testAcl < matlab.unittest.TestCase
             write(testCase.logObj,'debug','Testing getGrantsAsList');
 
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
 
             % create a small block of data and save it to a file
@@ -101,8 +105,11 @@ classdef testAcl < matlab.unittest.TestCase
             % Create the client and initialize
             write(testCase.logObj,'debug','Testing getBucketAcl');
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
-
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
             % create a bucket to hold the object
             uniqName = lower(matlab.lang.makeValidName(['com.example.awss3.unittest',datestr(now)],'ReplacementStyle','delete'));

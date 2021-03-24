@@ -1,5 +1,5 @@
 function objectMetadata = getObjectMetadata(obj, varargin)
-% GETOBJECTMETADATA Method to retrieve an AWS S3 object's metadata
+% GETOBJECTMETADATA Method to retrieve an Amazon S3 object's metadata
 % Download an object's metadata without downloading the object itself
 %
 % Examples:
@@ -9,7 +9,7 @@ function objectMetadata = getObjectMetadata(obj, varargin)
 %   myMD = s3.getObjectMetadata(bucketName, keyName, sseKey);
 %
 
-% Copyright 2017 The MathWorks, Inc.
+% Copyright 2017-2021 The MathWorks, Inc.
 
 %% Imports
 import com.amazonaws.services.s3.model.GetObjectMetadataRequest

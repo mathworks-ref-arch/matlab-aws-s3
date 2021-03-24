@@ -1,5 +1,5 @@
 function key = generateSSECKey(~, varargin)
-% GENERATESECRETKEY Method to generate a secret key for use with AWS S3
+% GENERATESECRETKEY Method to generate a secret key for use with Amazon S3
 % The method generates a key that is suitable for use with server side
 % encryption using a client side provided and managed key. Only AES 256 bit
 % encryption is supported.

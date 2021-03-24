@@ -1,5 +1,5 @@
 function acl = getBucketAcl(obj, bucketName)
-% GETBUCKETACL Method to get the ACL of an existing AWS S3 bucket
+% GETBUCKETACL Method to get the ACL of an existing Amazon S3 bucket
 % Get the ACL for a bucket, the ACL can then be inspected or applied to
 % another bucket. Depending on the permissions of the bucket it is possible
 % that an empty ACL with no properties will be returned, e.g. if the bucket
@@ -8,7 +8,8 @@ function acl = getBucketAcl(obj, bucketName)
 %   s3.getBucketAcl(bucketName);
 %
 
-% Copyright 2017 The MathWorks, Inc.
+% Copyright 2017-2021 The MathWorks, Inc.
+
 %% Imports
 import com.amazonaws.services.s3.model.AccessControlList
 

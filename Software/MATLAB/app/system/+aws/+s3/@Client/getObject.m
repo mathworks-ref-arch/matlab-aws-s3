@@ -1,5 +1,5 @@
 function getObject(obj, varargin)
-% GETOBJECT Method to retrieve a file object from AWS S3
+% GETOBJECT Method to retrieve a file object from Amazon S3
 % Download an object from a given bucket with a given key name. If
 % downloading a file it will be saved using keyName as the filename
 % or optionally a specified filename.
@@ -36,7 +36,7 @@ function getObject(obj, varargin)
 %   s3.getObject(bucketName, keyName, SSECustomerKey);
 %
 
-% Copyright 2017 The MathWorks, Inc.
+% Copyright 2017-2021 The MathWorks, Inc.
 
 %% Imports
 import java.io.File;

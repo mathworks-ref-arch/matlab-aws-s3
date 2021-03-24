@@ -13,7 +13,7 @@ classdef testProviderChainEC2 < matlab.unittest.TestCase
     %
     % The test suite exercises the basic operations on the S3 Client.
     
-    % Copyright 2017 The MathWorks, Inc.
+    % Copyright 2017-2021 The MathWorks, Inc.
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% Please add test cases below

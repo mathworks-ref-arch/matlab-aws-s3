@@ -3,7 +3,7 @@ classdef testSaveLoad < matlab.unittest.TestCase
     %
     % The test suite exercises the basic operations on the S3 Client.
 
-    % Copyright 2017 The MathWorks, Inc.
+    % Copyright 2017-2021 The MathWorks, Inc.
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% Please add test cases below
@@ -29,7 +29,11 @@ classdef testSaveLoad < matlab.unittest.TestCase
         function testLoad1File(testCase)
             write(testCase.logObj,'debug','Testing testLoad1File');
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
 
             % create a small block of data
@@ -70,7 +74,11 @@ classdef testSaveLoad < matlab.unittest.TestCase
         function testLoad1VarNamed(testCase)
             write(testCase.logObj,'debug','Testing testLoad1VarNamed');
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
 
             % create a small block of data
@@ -101,7 +109,11 @@ classdef testSaveLoad < matlab.unittest.TestCase
         function testLoad1VarNoMatExt(testCase)
             write(testCase.logObj,'debug','Testing testLoad1VarUnnamed');
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
 
             % create a small block of data
@@ -137,7 +149,11 @@ classdef testSaveLoad < matlab.unittest.TestCase
             write(testCase.logObj,'debug','Testing testSave1File');
             % Create the client and initialize
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
 
             % create a small block of data and save it to a file
@@ -173,7 +189,11 @@ classdef testSaveLoad < matlab.unittest.TestCase
             write(testCase.logObj,'debug','Testing testSave1File');
             % Create the client and initialize
             s3 = aws.s3.Client();
-            s3.useCredentialsProviderChain = false;
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
             s3.initialize();
 
             % create a small block of data and save it to a file

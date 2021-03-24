@@ -1,5 +1,5 @@
 function deleteBucket(obj, bucketName)
-% DELETEBUCKET Method to delete an AWS S3 bucket
+% DELETEBUCKET Method to delete an Amazon S3 bucket
 % Delete a bucket on the S3 service. For example:
 %
 %   s3 = aws.s3.Client();
@@ -10,7 +10,7 @@ function deleteBucket(obj, bucketName)
 % irreversibly.
 %
 
-% Copyright 2017 The MathWorks, Inc.
+% Copyright 2017-2021 The MathWorks, Inc.
 
 logObj = Logger.getLogger();
 write(logObj,'verbose',['Deleting bucket ',bucketName]);

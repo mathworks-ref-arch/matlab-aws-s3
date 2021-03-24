@@ -123,7 +123,7 @@ classdef Client < aws.Object
     %
     %  Alternate endpointURI:
     %
-    % If an alternative endpoint is required, e.g. if using an non-AWS S3
+    % If an alternative endpoint is required, e.g. if using an non-Amazon S3
     % service one can specified it as follows:
     %       s3 = aws.s3.Client();
     %       s3.endpointURI = 'https//mylocals3.example.com';
@@ -146,7 +146,7 @@ classdef Client < aws.Object
         % e.g. proxy handling
         clientConfiguration = aws.ClientConfiguration();
         % endpoint for the service, this is changed for example if connecting to
-        % a non AWS S3 implementation
+        % a non Amazon S3 implementation
         endpointURI = matlab.net.URI();
         pathStyleAccessEnabled = false;
     end
@@ -161,7 +161,7 @@ classdef Client < aws.Object
 
             write(logObj,'verbose','Creating Client');
             if ~usejava('jvm')
-                write(logObj,'error','MATLAB must be used with the JVM enabled to access AWS S3');
+                write(logObj,'error','MATLAB must be used with the JVM enabled to access Amazon S3');
             end
             if verLessThan('matlab','9.2') % R2017a
                 write(logObj,'error','MATLAB Release 2017a or newer is required');

@@ -1,7 +1,7 @@
 # Basic Usage
 
 ## Initializing a client
-The first step is to create a client to connect to S3™.
+The first step is to create a client to connect to Amazon S3™.
 ```
 s3 = aws.s3.Client();
 ```
@@ -9,11 +9,11 @@ Once created, certain properties of the client can be set. As an example, a loca
 ```
 s3.useCredentialsProviderChain = false;
 ```
-Initialize the MATLAB® environment to work with S3.
+Initialize the MATLAB® environment to work with Amazon S3.
 ```
 s3.initialize();
 ```
-This sets up the current MATLAB context to connect to the AWS S3 service by authenticating as discussed in [Authentication](Authentication.md) and initializing a client. In this case by default setting the client to not use encryption. Other encryption options are discussed in more detail in [Encryption Support](EncryptionSupport.md). If desired the client can be initialized with an alternate JSON credentials file. This can be useful if the default location cannot be used or if one needs to connect multiple clients with different credentials at the same time.
+This sets up the current MATLAB context to connect to the Amazon S3 service by authenticating as discussed in [Authentication](Authentication.md) and initializing a client. In this case by default setting the client to not use encryption. Other encryption options are discussed in more detail in [Encryption Support](EncryptionSupport.md). If desired the client can be initialized with an alternate JSON credentials file. This can be useful if the default location cannot be used or if one needs to connect multiple clients with different credentials at the same time.
 
 By default the package will provide minimal feedback however one can increase the level of feedback by altering the logging level to 'verbose', see [Logging](Logging.md) for more details.
 
@@ -129,7 +129,7 @@ A bucket must first be empty of objects in order to delete it.
 **CAUTION** - since bucket names are globally unique, you may not be able to recreate a bucket of the same name immediately. It might take some time before the name can be reused.
 
 ## Using MATLAB save/load semantics
-This package consciously uses semantics that largely mirror those of the AWS S3 Java SDK. This recognizes the scale of S3 ecosystem and the fact that many S3 users interact with the service using a variety of tools. However, a MATLAB approach for the core functionality via *load* and *save* commands is also available. These commands support most of the functionality of the load and save commands but in the context of S3.
+This package consciously uses semantics that largely mirror those of the Amazon S3 Java SDK. This recognizes the scale of S3 ecosystem and the fact that many S3 users interact with the service using a variety of tools. However, a MATLAB approach for the core functionality via *load* and *save* commands is also available. These commands support most of the functionality of the load and save commands but in the context of S3.
 
 As an example:
 ```
@@ -173,4 +173,4 @@ certCheckStatus = sdkGlobalConfiguration.isCertCheckingDisabled;
 ```
 
 
-[//]: #  (Copyright 2018-2019 The MathWorks, Inc.)
+[//]: #  (Copyright 2018-2021 The MathWorks, Inc.)
