@@ -1,5 +1,13 @@
-# MATLAB Interface *for Amazon S3*
-# Release Notes
+# MATLAB Interface *for Amazon S3* - Release Notes
+
+## Release 0.5.12 (3rd Mar 2022)
+* Updated pom.xml latest AWS 1.12.150 BOM
+
+## Release 0.5.11 (13th Dec 2021)
+
+* Updated pom.xml latest AWS 1.12.128 BOM to include log4j updates
+* Updated to JUNIT 4.3.2
+* Updated Maven shade plug version
 
 ## Release 0.5.10 (22nd Mar 2021)
 * Updated to support integration testing

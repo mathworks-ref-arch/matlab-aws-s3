@@ -199,7 +199,7 @@
   A scheme is selected as follows:
         s3 = aws.s3.Client();
         s3.encryptionScheme = 'SSES3';
-        s3.intialize();
+        s3.initialize();
  
   If using 'NOENCRYPTIION' data will NOT be encrypted at rest on S3.
  
@@ -208,14 +208,14 @@
         s3 = aws.s3.Client();
         s3.encryptionScheme = 'CSEAMK';
         s3.CSEAMKKeyPair = s3.generateCSEAsymmetricMasterKey(1024);
-        s3.intialize();
+        s3.initialize();
  
   If using 'CSESMK' then a Client-side Symmetric Master Key argument of type
   javax.crypto.spec.SecretKeySpec is also required, e.g:
         s3 = aws.s3.Client();
         s3.encryptionScheme = 'CSESMK';
         s3.CSESMKKey = s3.generateCSESymmetricMasterKey('AES', 256);
-        s3.intialize();
+        s3.initialize();
  
   If using 'SSEC' a key of type com.amazonaws.services.s3.model.SSECustomerKey
   is required as an argument to put and get calls but is not used at client
@@ -225,7 +225,7 @@
   additional client property, e.g:
         s3 = aws.s3.Client();
         s3.KMSCMKKeyID = 'c6123457-cea5-476a-abb9-a0a4f678e8e';
-        s3.intialize();
+        s3.initialize();
  
   If using 'SSEKMS' an argument of type
   com.amazonaws.services.s3.model.SSEAwsKeyManagementParams is required for
@@ -269,7 +269,7 @@
         s3.useCredentialsProviderChain = false;
         % using a Unix style path in this case
         s3.credentialsFilePath= '/home/myusername/creddir/mycredentials.file'
-        s3.intialize();
+        s3.initialize();
  
   The contents of this file contains a JSON formatted snippet that contains
   the access and secret keys. An alternate filename can be provided as an
@@ -561,7 +561,7 @@
   Example:
         s3 = aws.s3.Client();
         s3.encryptionScheme = 'SSES3';
-        s3.intialize();
+        s3.initialize();
 
 
 

@@ -6,7 +6,7 @@ function initStat = initialize(obj, varargin)
 % Example:
 %       s3 = aws.s3.Client();
 %       s3.encryptionScheme = 'SSES3';
-%       s3.intialize();
+%       s3.initialize();
 %
 
 % Copyright 2017-2019 The MathWorks, Inc.

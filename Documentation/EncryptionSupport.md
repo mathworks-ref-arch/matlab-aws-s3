@@ -99,7 +99,7 @@ A symmetric 256 bit AES key can be generated using:
 s3 = aws.s3.Client();
 s3.encryptionScheme = 'CSESMK';
 s3.CSESMKKey = s3.generateCSESymmetricMasterKey('AES', 256);
-s3.intialize();
+s3.initialize();
 ```
 AES 256 bit keys should not be considered secure as they can feasibly be brute forced. This method should not be used for sensitive data. 128 and 196 bit AES keys can also be generated using this method, though may not be accepted by AWS.
 
@@ -109,7 +109,7 @@ An asymmetric RSA 1024 bit key pair can be generated using:
 s3 = aws.s3.Client();
 s3.encryptionScheme = 'CSEAMK';
 s3.CSEAMKKeyPair = s3.generateCSEAsymmetricMasterKey(1024);
-s3.intialize();
+s3.initialize();
 ```
 The minimum supported RSA key size is 512 bit. Considerably longer RSA keys are recommended. When working with key pairs two supporting functions are available `saveKeyPair` and `loadKeyPair`. `saveKeyPair` writes a key pair to two files one for the public key and one for the private key e.g.:
 ```
@@ -129,7 +129,7 @@ Encryption is performed at the client side. The key is specified using a key ID 
 ```
 s3 = aws.s3.Client();
 s3.KMSCMKKeyID = 'c6123457-cea5-476a-abb9-a0a4f678e8e';
-s3.intialize();
+s3.initialize();
 ```
 
 ## Encryption examples
