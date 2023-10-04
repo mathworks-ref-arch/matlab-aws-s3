@@ -7,22 +7,23 @@ S3 is often used as primary storage for cloud-native applications. S3 stores dat
 Buckets are the containers for objects. Access to a bucket can be controlled. Additionally, access logs for the bucket and its objects can be viewed. Users can choose which region Amazon S3 will store the bucket's contents.
 
 ## Contents
-1. [Installation](Installation.md)
-2. [Authentication & IAM Roles](Authentication.md)
-3. [Getting Started](GettingStarted.md)
-4. [Basic Usage](BasicUsage.md)
-5. [Logging](Logging.md)
-6. [Security](Security.md)    
-    a. [Using Access Controls](AccessControls.md)    
-    b. [Encryption Support](EncryptionSupport.md)    
-7. [Environments](SupportedEnvironments.md)    
-    a. [Running on MATLAB Desktop](MATLABDesktop.md)    
-    b. [Running on MATLAB Production Server (Runtime)](MATLABProductionServer.md)    
-    c. [Running on MATLAB Distributed Computing Server](MATLABDistributed.md)    
-8. [References](References.md)
-9. Appendix   
-    a. [Building the SDK](Rebuild.md)    
-    b. [S3 API Documentation](awsS3ApiDoc.md)    
 
+* [Installation](Installation.md)
+* [Authentication & IAM Roles](Authentication.md)
+* [Getting Started](GettingStarted.md)
+* [Basic Usage](BasicUsage.md)
+* [Large data transfers](Multipart.md)
+* [Logging](Logging.md)
+* [Security](Security.md)
+  * [Using Access Controls](AccessControls.md)
+  * [Encryption Support](EncryptionSupport.md)
+* [Environments](SupportedEnvironments.md)
+  * [Running on MATLAB Desktop](MATLABDesktop.md)
+  * [Running on MATLAB Production Server (Runtime)](MATLABProductionServer.md)
+  * [Running on MATLAB Distributed Computing Server](MATLABDistributed.md)
+* [References](References.md)
+* Appendix
+  * [Building the SDK](Rebuild.md)
+  * [S3 API Documentation](awsS3ApiDoc.md)
 
-[//]: #  (Copyright 2018-2021 The MathWorks, Inc.)
+[//]: #  (Copyright 2018-2023 The MathWorks, Inc.)

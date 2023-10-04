@@ -37,15 +37,18 @@ classdef ObjectMetadata < aws.Object
     %       {'file'}    {'myMDValue1'}    {'myMDValue2'}    {'myMDValue3'}
     %
     
-    % Copyright 2018 The MathWorks, Inc.
+    % Copyright 2018-2023 The MathWorks, Inc.
 
     methods
-        function obj = ObjectMetadata()
-            import com.amazonaws.services.s3.model.ObjectMetadata;
-
-            % logObj = Logger.getLogger();
-            obj.Handle = com.amazonaws.services.s3.model.ObjectMetadata();
-
+        function obj = ObjectMetadata(varargin)            
+            if nargin == 0
+                obj.Handle = com.amazonaws.services.s3.model.ObjectMetadata();
+            elseif nargin == 1 && isa(varargin{1}, 'com.amazonaws.services.s3.model.ObjectMetadata')
+                obj.Handle = varargin{1};
+            else
+                logObj = Logger.getLogger();
+                write(logObj,'error','Invalid arguments');
+            end
         end %function
     end %methods
 end %class

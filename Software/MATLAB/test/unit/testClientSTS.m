@@ -107,7 +107,7 @@ classdef testClientSTS < matlab.unittest.TestCase
             % cleanup
             s3.deleteBucket(uniqName);
             s3.shutdown();
-            % force a short wait so next call to now sill always return a
+            % force a short wait so next call to now will always return a
             % new number
             pause(1.1);
         end

@@ -20,7 +20,7 @@ classdef testSaveLoad < matlab.unittest.TestCase
     end
 
     methods (TestMethodTeardown)
-        function testTearDown(testCase)
+        function testTearDown(testCase) %#ok<MANU> 
 
         end
     end
@@ -50,7 +50,7 @@ classdef testSaveLoad < matlab.unittest.TestCase
             clear x3;
 
             % create a bucket to hold the object
-            bucketname = lower(matlab.lang.makeValidName(['com.example.awss3.unittest',datestr(now)],'ReplacementStyle','delete'));
+            bucketname = lower(matlab.lang.makeValidName(['com.example.awss3.unittest',datestr(now)],'ReplacementStyle','delete'));  
             s3.createBucket(bucketname);
             % upload the file as an object
             s3.putObject(bucketname,filename);
@@ -85,7 +85,7 @@ classdef testSaveLoad < matlab.unittest.TestCase
             x = rand(100,100);
 
             % create a bucket to hold the object
-            bucketname = lower(matlab.lang.makeValidName(['com.example.awss3.unittest',datestr(now)],'ReplacementStyle','delete'));
+            bucketname = lower(matlab.lang.makeValidName(['com.example.awss3.unittest',datestr(now)],'ReplacementStyle','delete')); %#ok<*TNOW1,*DATST> 
             s3.createBucket(bucketname);
             objname = 'my_s3object_name.mat';
             filename = [tempname,'.mat'];

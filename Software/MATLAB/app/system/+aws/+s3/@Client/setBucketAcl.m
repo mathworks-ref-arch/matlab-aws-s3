@@ -12,7 +12,7 @@ function setBucketAcl(obj, bucketName, acl)
 %
 % See Amazon S3 JDK SDK for a complete list of canned ACLs.
 
-% Copyright 2017-2021 The MathWorks, Inc.
+% Copyright 2017-2023 The MathWorks, Inc.
 
 %% Imports
 import com.amazonaws.services.s3.model.AccessControlList
@@ -22,4 +22,4 @@ logObj = Logger.getLogger();
 write(logObj,'verbose',['Setting ACL on: ',bucketName]);
 obj.Handle.setBucketAcl(bucketName, acl.Handle);
 
-end %functon
+end %function

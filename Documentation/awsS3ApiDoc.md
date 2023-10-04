@@ -1,96 +1,387 @@
-# MATLAB Interface *for Amazon S3* API documentation
+# MATLAB Interface *for Amazon S3*
+
+## API Reference
+
+Documentation generation settings:
+
+* Including class level help text
+* Omitting constructor help text
+* Excluding inherited methods
+* Excluding default MATLAB classes
 
 
-## Amazon S3 Interface Objects and Methods:
-* @AccessControlList
-* @CannedAccessControlList
-* @CanonicalGrantee
-* @Client
-* @EmailAddressGrantee
-* @EncryptionScheme
-* @Grant
-* @GroupGrantee
-* @ObjectMetadata
-* @Owner
-* @Permission
+## Package  *aws*
 
+
+### Classes
+
+* [aws.ClientConfiguration](#awsclientconfiguration)
+* [aws.Object](#awsobject)
+
+### Subpackage  *aws.s3*
+
+
+### Classes
+
+* [aws.s3.CanonicalGrantee](#awss3canonicalgrantee)
+* [aws.s3.EncryptionScheme](#awss3encryptionscheme)
+* [aws.s3.Permission](#awss3permission)
+* [aws.s3.CannedAccessControlList](#awss3cannedaccesscontrollist)
+* [aws.s3.EmailAddressGrantee](#awss3emailaddressgrantee)
+* [aws.s3.ObjectMetadata](#awss3objectmetadata)
+* [aws.s3.Client](#awss3client)
+* [aws.s3.Grant](#awss3grant)
+* [aws.s3.GroupGrantee](#awss3groupgrantee)
+* [aws.s3.AccessControlList](#awss3accesscontrollist)
+* [aws.s3.Owner](#awss3owner)
+
+### Subpackage  *aws.s3.transfer*
+
+
+### Classes
+
+* [aws.s3.transfer.AbortableTransfer](#awss3transferabortabletransfer)
+* [aws.s3.transfer.Copy](#awss3transfercopy)
+* [aws.s3.transfer.Download](#awss3transferdownload)
+* [aws.s3.transfer.MultipleFileDownload](#awss3transfermultiplefiledownload)
+* [aws.s3.transfer.MultipleFileUpload](#awss3transfermultiplefileupload)
+* [aws.s3.transfer.PauseResult](#awss3transferpauseresult)
+* [aws.s3.transfer.PresignedUrlDownload](#awss3transferpresignedurldownload)
+* [aws.s3.transfer.Transfer](#awss3transfertransfer)
+* [aws.s3.transfer.TransferManager](#awss3transfertransfermanager)
+* [aws.s3.transfer.TransferManagerBuilder](#awss3transfertransfermanagerbuilder)
+* [aws.s3.transfer.TransferProgress](#awss3transfertransferprogress)
+* [aws.s3.transfer.TransferState](#awss3transfertransferstate)
+* [aws.s3.transfer.Upload](#awss3transferupload)
+
+### Subpackage  *aws.s3.transfer.model*
+
+
+### Classes
+
+* [aws.s3.transfer.model.CopyResult](#awss3transfermodelcopyresult)
+* [aws.s3.transfer.model.PersistableTransfer](#awss3transfermodelpersistabletransfer)
+* [aws.s3.transfer.model.UploadResult](#awss3transfermodeluploadresult)
+
+### Subpackage  *aws.s3.model*
+
+
+### Classes
+
+* [aws.s3.model.GetObjectRequest](#awss3modelgetobjectrequest)
+* [aws.s3.model.PutObjectRequest](#awss3modelputobjectrequest)
+* [aws.s3.model.CompleteMultipartUploadRequest](#awss3modelcompletemultipartuploadrequest)
+* [aws.s3.model.CreateBucketRequest](#awss3modelcreatebucketrequest)
+* [aws.s3.model.CopyObjectResult](#awss3modelcopyobjectresult)
+* [aws.s3.model.UploadPartRequest](#awss3modeluploadpartrequest)
+* [aws.s3.model.InitiateMultipartUploadRequest](#awss3modelinitiatemultipartuploadrequest)
+* [aws.s3.model.UploadPartResult](#awss3modeluploadpartresult)
+* [aws.s3.model.InitiateMultipartUploadResult](#awss3modelinitiatemultipartuploadresult)
+* [aws.s3.model.CompleteMultipartUploadResult](#awss3modelcompletemultipartuploadresult)
+
+### Subpackage  *aws.s3.mathworks.internal*
+
+### Functions
+
+* [aws.s3.mathworks.internal.int64FnHandler](#awss3mathworksinternalint64fnhandler)
+
+
+### Subpackage  *aws.s3.mathworks.s3*
+
+### Functions
+
+* [aws.s3.mathworks.s3.transferMonitor](#awss3mathworkss3transfermonitor)
+
+
+
+### Standalone Functions
+
+* [splitName](#splitname)
 
 
 ------
 
-## @AccessControlList
+## API Help
 
-### @AccessControlList/AccessControlList.m
+
+#### aws.ClientConfiguration
+
 ```notalanguage
-  ACCESSCONTROLLIST class to define a S3 ACL object
-  The AccessControlList method calls the constructor for the AWS Java SDK
-  ACL object
+  CLIENTCONFIGURATION creates a client network configuration object
+  This class can be used to control client behavior such as:
+   * Connect to the Internet through proxy
+   * Change HTTP transport settings, such as connection timeout and request retries
+   * Specify TCP socket buffer size hints
+  (Only limited proxy related methods are currently available)
+ 
+  Example, in this case using an s3 client:
+    s3 = aws.s3.Client();
+    s3.clientConfiguration.setProxyHost('proxyHost','myproxy.example.com');
+    s3.clientConfiguration.setProxyPort(8080);
+    s3.initialize();
+
+```
+
+*aws.ClientConfiguration.getNonProxyHosts*
+
+```notalanguage
+  GETNONPROXYHOSTS Sets optional hosts accessed without going through the proxy
+  Returns either the nonProxyHosts set on this object, or if not provided,
+  returns the value of the Java system property http.nonProxyHosts.
+  Result is returned as a character vector.
+ 
+  Note the following caveat from the Amazon DynamoDB documentation:
+ 
+  We still honor this property even when getProtocol() is https, see
+  http://docs.oracle.com/javase/7/docs/api/java/net/doc-files/net-properties.html
+  This property is expected to be set as a pipe separated list. If neither are
+  set, returns the value of the environment variable NO_PROXY/no_proxy.
+  This environment variable is expected to be set as a comma separated list.
+
+```
+
+*aws.ClientConfiguration.setNonProxyHosts*
+
+```notalanguage
+  SETNONPROXYHOSTS Sets optional hosts accessed without going through the proxy
+  Hosts should be specified as a character vector.
+
+```
+
+*aws.ClientConfiguration.setProxyHost*
+
+```notalanguage
+  SETPROXYHOST Sets the optional proxy host the client will connect through
+  This is based on the setting in the MATLAB preferences panel. If the host
+  is not set there on Windows then the Windows system preferences will be
+  used. Though it is not normally the case proxy settings may vary based on the
+  destination URL, if this is the case a URL should be provided for a specific
+  service. If a URL is not provided then https://s3.amazonaws.com is used as
+  a default and is likely to match the relevant proxy selection rules for AWS
+  traffic.
+ 
+  Examples:
+ 
+    To have the proxy host automatically set based on the MATLAB preferences
+    panel using the default URL of 'https://s3.amazonaws.com:'
+        clientConfiguration.setProxyHost();
+ 
+    To have the proxy host automatically set based on the given URL:
+        clientConfiguration.setProxyHost('autoURL','https://examplebucket.amazonaws.com');
+ 
+    To force the value of the proxy host to a given value, e.g. myproxy.example.com:
+        clientConfiguration.setProxyHost('proxyHost','myproxy.example.com');
+    Note this does not overwrite the value set in the preferences panel.
+ 
+  The client initialization call will invoke setProxyHost() to set a value based
+  on the MATLAB preference if the proxyHost value is not to an empty value.
+
+```
+
+*aws.ClientConfiguration.setProxyPassword*
+
+```notalanguage
+  SETPROXYPASSWORD Sets the optional proxy password
+  This is based on the setting in the MATLAB preferences panel. If the password
+  is not set there on Windows then the Windows system preferences will be
+  used.
+ 
+  Examples:
+ 
+    To set the password to a given value:
+        clientConfig.setProxyPassword('myProxyPassword');
+    Note this does not overwrite the value set in the preferences panel.
+ 
+    To set the password automatically based on provided preferences:
+        clientConfig.setProxyPassword();
+ 
+  The client initialization call will invoke setProxyPassword() to set
+  a value based on the MATLAB preference if the proxy password value is set.
+ 
+  Note, it is bad practice to store credentials in code, ideally this value
+  should be read from a permission controlled file or other secure source
+  as required.
+
+```
+
+*aws.ClientConfiguration.setProxyPort*
+
+```notalanguage
+  SETPROXYPORT Sets the optional proxy port the client will connect through
+  This is normally based on the setting in the MATLAB preferences panel. If the
+  port is not set there on Windows then the Windows system preferences will be
+  used. Though it is not normally the case proxy settings may vary based on the
+  destination URL, if this is the case a URL should be provided for a specific
+  service. If a URL is not provided then https://s3.amazonaws.com is used as
+  a default and is likely to match the relevant proxy selection rules for AWS
+  traffic.
+ 
+  Examples:
+ 
+    To have the port automatically set based on the default URL of
+    https://s3.amazonaws.com:
+        clientConfiguration.setProxyPort();
+ 
+    To have the port automatically set based on the given URL:
+        clientConfiguration.setProxyPort('https://examplebucket.amazonaws.com');
+ 
+    To force the value of the port to a given value, e.g. 8080:
+        clientConfiguration.setProxyPort(8080);
+    Note this does not alter the value held set in the preferences panel.
+ 
+  The client initialization call will invoke setProxyPort() to set a value based
+  on the MATLAB preference if the proxy port value is not an empty value.
+
+```
+
+*aws.ClientConfiguration.setProxyUsername*
+
+```notalanguage
+  SETPROXYUSERNAME Sets the optional proxy username
+  This is based on the setting in the MATLAB preferences panel. If the username
+  is not set there on Windows then the Windows system preferences will be
+  used.
+ 
+  Examples:
+ 
+     To set the username to a given value:
+         clientConfig.setProxyUsername('myProxyUsername');
+     Note this does not overwrite the value set in the preferences panel.
+ 
+     To set the password automatically based on provided preferences:
+         clientConfig.setProxyUsername();
+ 
+  The client initialization call will invoke setProxyUsername();
+  to set preference based on the MATLAB preference if the proxyUsername value is
+  not an empty value.
+ 
+  Note it is bad practice to store credentials in code, ideally this value
+  should be read from a permission controlled file or other secure source
+  as required.
+
+```
+
+
+#### aws.Object
+
+```notalanguage
+  OBJECT Root object for all the AWS SDK objects
+
+```
+
+
+#### aws.s3.CanonicalGrantee
+
+```notalanguage
+  CANONICALGRANTEE defines a Canonical identifier address based grantee
+  Returns a Java CanonicalGrantee object for S3 ACLs.
+  It creates a canonical identifier string based object that can be used
+  when creating Access Control Lists.
+ 
+  Here it is used to grant a permission to an ACL along with a permission
+  assuming an existing aws.s3 object
  
   Example:
+    canonicalgrantee = aws.s3.CanonicalGrantee('d25639fbe9c19cd30a4c0f43fbf00e2d3f96400a9aa8dabfbbebe1906Example');
+    my_perm = aws.s3.Permission('read');
+    my_acl = aws.s3.AccessControlList();
+ 	my_acl.grantPermission(canonicalgrantee, my_perm);
+
+```
+
+
+#### aws.s3.EncryptionScheme
+
+```notalanguage
+ ENCRYPTIONSCHEME defines the various supported S3 encryption schemes
+ 
+    NOENCRYPTION  : do not use encryption
+    CSESMK    : client side with a symmetric master key
+    CSEAMK    : client side with a asymmetric master key
+    KMSCMK    : Key Management Service managed customer master key
+    SSEC      : sever side encryption with a customer supplied key
+    SSEKMS    : server side encryption using the Key Management Service
+    SSES3     : server side encryption using S3 managed encryption keys
+
+```
+
+
+```notalanguage
+Enumeration:
+  NOENCRYPTION
+  CSESMK
+  CSEAMK
+  KMSCMK
+  SSEC
+  SSEKMS
+  SSES3
+```
+
+
+#### aws.s3.Permission
+
+```notalanguage
+  Class to define a Permission object for S3 Access Control Lists
+  The permission can take one of five enumeration values reflecting various
+  rights.
+ 
+  Grant permission permitted values are documented as:
+  	READ, WRITE, READ_ACP, WRITE_ACP and FULL_CONTROL
+  However the Java SDK enum values are:
+    Read, Write, ReadAcp, WriteAcp and FullControl
+  As this is can easily lead to errors this constructor will accept either
+  and is case insensitive
+ 
+  Thus these mixed case names are used as the calling convention. Inputs
+  are converted to upper case prior to evaluation to reduce typo errors.
+  Underscores are not allowed for.
+ 
+  The following sets my_perm to READ and uses it to create an ACL.
+  A grantee is also required, in this case based on an email address.
+ 
     s3 = aws.s3.Client();
     s3.initialize();
-    my_acl = aws.s3.AccessControlList();
-    my_perm = aws.s3.Permission('read');
+    my_perm = aws.s3.Permission('READ');
     email_addr_grantee = aws.s3.EmailAddressGrantee('joe.blog@example.com');
     my_acl.grantPermission(email_addr_grantee, my_perm);
-
-    Documentation for aws.s3.AccessControlList
-       doc aws.s3.AccessControlList
-
-
-
-
-```
-### @AccessControlList/getGrantsAsList.m
-```notalanguage
-  GETGRANTSASLIST Method to return a list of grants associated with an ACL
-  The list is returned as a MATLAB cell array.
-  Each grant consists of a grantee and a permission.
-  An empty cell array is returned if there are no grants.
  
-  Example:
-   s3 = aws.s3.Client();
-   s3.initialize();
-   acl = s3.getObjectAcl(bucketname,keyname);
-   grantlist = acl.getGrantsAsList();
-
-
-
-```
-### @AccessControlList/grantPermission.m
-```notalanguage
-  GRANTPERMISSION Method to add a permission grant to an existing S3 ACL
+  When granted on a bucket ACL permissions correspond to the following
+  S3 Access Policy permissions apply as per S3 documentation:
  
-  Example:
-    my_acl = aws.s3.AccessControlList();
-    my_perm = aws.s3.Permission('read');
-    email_addr_grantee = aws.s3.EmailAddressGrantee('joe.blog@example.com');
-    my_acl.grantPermission(email_addr_grantee, my_perm);
-
-
-
-```
-### @AccessControlList/setOwner.m
-```notalanguage
-  SETOWNER Method to set the owner of an ACL
+ 	READ : Allows grantee to list the objects in the bucket.
  
-  Example:
-    acl = aws.s3.AccessControlList();
-    owner = aws.s3.createOwner();
-    owner.setDisplayName('my_display_name');
-    owner.setId('aba123456a64f60b91c7736971a81116fb2a07fff2331499c04a967c243b7576');
-    acl.setOwner(owner);
-
-
+ 	WRITE : Allows grantee to create, overwrite, and delete any object in
+            the bucket.
+ 
+ 	READ_ACP : Allows grantee to read the bucket ACL.
+ 
+ 	WRITE_ACP : Allows grantee to write the ACL for the applicable bucket.
+ 
+ 	FULL_CONTROL : Allows grantee the READ, WRITE, READ_ACP, and WRITE_ACP
+                   permissions on the bucket. It is equivalent to granting
+                   READ, WRITE, READ_ACP, and WRITE_ACP ACL permissions.
+ 
+ 
+  When granted on an object ACL permissions correspond to the following
+  S3 Access Policy permissions apply as per s3 documentation:
+ 
+ 	READ : Allows grantee to read the object data and its metadata.
+ 
+ 	WRITE : Not applicable.
+ 
+ 	READ_ACP : Allows grantee to read the object ACL
+ 
+ 	WRITE_ACP : Allows grantee to write the ACL for the applicable object.
+ 
+ 	FULL_CONTROL : Is equivalent to granting READ, READ_ACP, and WRITE_ACP
+                   ACL permissions. Allows grantee the READ, READ_ACP, and
+                   WRITE_ACP permissions on the object.
 
 ```
 
-------
 
+#### aws.s3.CannedAccessControlList
 
-## @CannedAccessControlList
-
-### @CannedAccessControlList/CannedAccessControlList.m
 ```notalanguage
   CANNEDACCESSCONTROLLIST class to define a canned ACL object
   Canned access control lists are commonly used ACLs
@@ -135,49 +426,152 @@
   GroupGrantee.AllUsers group grantee is granted Permission.Read and
   Permission.Write access.
 
-    Documentation for aws.s3.CannedAccessControlList
-       doc aws.s3.CannedAccessControlList
-
-
-
-
 ```
 
-------
 
+#### aws.s3.EmailAddressGrantee
 
-## @CanonicalGrantee
-
-### @CanonicalGrantee/CanonicalGrantee.m
 ```notalanguage
-  CANONICALGRANTEE defines a Canonical identifier address based grantee
-  Returns a Java CanonicalGrantee object for S3 ACLs.
-  It creates a canonical identifier string based object that can be used
-  when creating Access Control Lists.
+  Class to define an email address based grantee
+  EMAILADDRESSGRANTEE Method returns a Java EmailAddressGrantee object for S3 ACLs
+  It creates an EmailAddressGrantee object based on an email address
+  string that can be used when creating Access Control Lists.
  
   Here it is used to grant a permission to an ACL along with a permission
-  assuming an existing aws.s3 object
- 
   Example:
-    canonicalgrantee = aws.s3.CanonicalGrantee('d25639fbe9c19cd30a4c0f43fbf00e2d3f96400a9aa8dabfbbebe1906Example');
-    my_perm = aws.s3.Permission('read');
-    my_acl = aws.s3.AccessControlList();
- 	my_acl.grantPermission(canonicalgrantee, my_perm);
-
-    Documentation for aws.s3.CanonicalGrantee
-       doc aws.s3.CanonicalGrantee
-
-
-
+    emailaddrgrantee = aws.s3.EmailAddressGrantee('joe.blog@example.com');
+    my_perm = s3.Permission('read');
+    my_acl.grantPermission(emailaddrgrantee, my_perm);
 
 ```
 
-------
+
+#### aws.s3.ObjectMetadata
+
+```notalanguage
+  ObjectMetadata Represents the object metadata that is stored with S3
+  This includes custom user-supplied metadata, as well as the standard HTTP
+  headers that Amazon S3 sends and receives (Content-Length, ETag,
+  Content-MD5, etc.).
+ 
+  Example
+    s3 = aws.s3.Client();
+    s3.useCredentialsProviderChain = false;
+    s3.initialize();
+ 
+    myBucket = 'mb-testbucket-deleteme';
+    myKey = 'myobjectkey';
+    s3.createBucket('mb-testbucket-deleteme');
+    SampleData = rand(100);
+    save SampleData SampleData;
+ 
+    myMetadata = aws.s3.ObjectMetadata();
+    myMetadata.addUserMetadata('myMDKey1', 'myMDValue1');
+    myMetadata.addUserMetadata('myMDKey2', 'myMDValue2');
+    myMetadata.addUserMetadata('myMDKey3', 'myMDValue3');
+ 
+    s3.putObject(myBucket, 'SampleData.mat', myKey, myMetadata);
+    myDownloadedMetadata = s3.getObjectMetadata(myBucket, myKey);
+    myMap = myDownloadedMetadata.getUserMetadata();
+    % note keys are returned in lower case
+    myMap('mymdkey1')
+    ans =
+         'myMDValue1'
+    keys(myMap)
+    ans =
+      1x4 cell array
+        {'com-mathworks-matlabobject'}    {'mymdkey1'}    {'mymdkey2'}    {'mymdkey3'}
+    values(myMap)
+    ans =
+      1x4 cell array
+        {'file'}    {'myMDValue1'}    {'myMDValue2'}    {'myMDValue3'}
+
+```
+
+*aws.s3.ObjectMetadata.addUserMetadata*
+
+```notalanguage
+  ADDUSERMETADATA Adds key value pair of custom metadata for an object
+  Note that user-metadata for an object is limited by the HTTP request
+  header limit. All HTTP headers included in a request (including user
+  metadata headers and other standard HTTP headers) must be less than 8KB.
+  User-metadata keys are case insensitive and will be returned as lowercase
+  strings, even if they were originally specified with uppercase strings.
+ 
+  Example:
+    save myData x;
+    myMetadata = aws.s3.ObjectMetadata();
+    myMetadata.addUserMetadata('myKey', 'myValue');
+    s3.putObject('com-mathworks-mytestbucket', 'myData.mat', myMetadata);
+
+```
+
+*aws.s3.ObjectMetadata.getContentLength*
+
+```notalanguage
+  GETCONTENTLENGTH Gets the length of the object in bytes
+  Gets the Content-Length HTTP header indicating the size of the associated
+  object in bytes.
+  An int64 is returned.
+
+```
+
+*aws.s3.ObjectMetadata.getSSEAlgorithm*
+
+```notalanguage
+  GETSSEALGORITHM Returns algorithm when encrypting an object using managed keys
+
+```
+
+*aws.s3.ObjectMetadata.getSSEAwsKmsKeyId*
+
+```notalanguage
+  GETSSEAWSKMSKEYID Returns KMS key id for server side encryption of an object
+
+```
+
+*aws.s3.ObjectMetadata.getSSECustomerAlgorithm*
+
+```notalanguage
+  GETSSECUSTOMERALGORITHM Returns algorithm used with customer-provided keys
+  Returns the server-side encryption algorithm if the object is encrypted using
+  customer-provided keys.
+
+```
+
+*aws.s3.ObjectMetadata.getSSECustomerKeyMd5*
+
+```notalanguage
+  GETSSECUSTOMERKEYMD Returns the MD5 digest of the encryption key
+  Returns the base64-encoded MD5 digest of the encryption key for server-side
+  encryption, if the object is encrypted using customer-provided keys.
+
+```
+
+*aws.s3.ObjectMetadata.getUserMetadata*
+
+```notalanguage
+  GETUSERMETADATA Gets the custom user-metadata for the associated object
+  A containers.Map of the metadata keys and values is returned. If there is
+  no metadata an empty containers.Map is returned.
+ 
+  Example:
+    myDownloadedMetadata = s3.getObjectMetadata(myBucket, myObjectKey);
+    myMap = myDownloadedMetadata.getUserMetaData();
+    myMetadataValue = myMap(lower('myMetadataKey'));
+
+```
+
+*aws.s3.ObjectMetadata.getUserMetaDataOf*
+
+```notalanguage
+  GETUSERMETADATAOF Returns the value of the specified user meta datum
+
+```
 
 
-## @Client
+#### aws.s3.Client
 
-### @Client/Client.m
 ```notalanguage
   CLIENT Amazon S3 Client
  
@@ -295,8 +689,8 @@
   If a proxy is required to reach the S3 service this is configured using a
   ClientConfiguration, a simple example of which is as follows:
         s3 = aws.s3.Client();
-        s3.clientConfig.setProxyHost('proxyHost','myproxy.example.com');
-        s3.clientConfig.setProxyPort(8080);
+        s3.clientConfiguration.setProxyHost('proxyHost','myproxy.example.com');
+        s3.clientConfiguration.setProxyPort(8080);
         s3.initialize();
   If the proxy details are configured in the MATLAB preferences they
   will be used automatically.
@@ -309,21 +703,44 @@
         s3.endpointURI = 'https//mylocals3.example.com';
         s3.initialize();
 
-    Documentation for aws.s3.Client
-       doc aws.s3.Client
+```
 
+*aws.s3.Client.copyObject*
 
-
+```notalanguage
+  COPYOBJECT Copies a source object to a new destination in Amazon S3
+  All object metadata for the source object except server-side-encryption,
+  storage-class and website-redirect-location are copied to the new destination
+  object.
+  The Amazon S3 Access Control List (ACL) is not copied to the new object.
+  The new object will have the default Amazon S3 ACL.
+ 
+  For files less than 100MB the underlying API call used is
+  com.amazonaws.services.s3.AmazonS3Client.copyObject and the returned result
+  is a com.amazonaws.services.s3.model.CopyObjectResult wrapped as
+  aws.s3.model.CopyObjectResult.
+ 
+  For larger files the underlying API call used is
+  com.amazonaws.services.s3.transfer.copy and
+  a com.amazonaws.services.s3.transfer.model.CopyResult is returned wrapped
+  as a aws.s3.transfer.model.CopyResult.
+  
+  % Example;
+     s3 = aws.s3.Client();
+     s3.initialize();
+     result = s3.copyObject('mysourcebucket','mysourckey','mydestinationbucket', 'mydestinationkey');
 
 ```
-### @Client/createBucket.m
+
+*aws.s3.Client.createBucket*
+
 ```notalanguage
   CREATEBUCKET Method to create a bucket on the Amazon S3 service
   Create a bucket on the S3 service
  
     s3 = aws.s3.Client();
     s3.initialize();
-    s3.createBucket('com-mathworks-testbucket-jblog');
+    s3.createBucket('com-example-testbucket-jblog');
  
   Amazon S3 bucket names are globally unique, so once a bucket name has
   been taken by any user, it cannot be used to create another bucket with the same
@@ -342,10 +759,10 @@
   be returned as true. The nameUsed return value returns the name that is passed
   to S3.
 
-
-
 ```
-### @Client/deleteBucket.m
+
+*aws.s3.Client.deleteBucket*
+
 ```notalanguage
   DELETEBUCKET Method to delete an Amazon S3 bucket
   Delete a bucket on the S3 service. For example:
@@ -357,10 +774,10 @@
   The deletion of the bucket destroys this bucket (and all its contents)
   irreversibly.
 
-
-
 ```
-### @Client/deleteObject.m
+
+*aws.s3.Client.deleteObject*
+
 ```notalanguage
   DELETEOBJECTS Method to delete an object
   Removes the specified object from the specified S3 bucket.
@@ -369,10 +786,10 @@
  
     s3.deleteObject(bucketName, key);
 
-
-
 ```
-### @Client/doesBucketExist.m
+
+*aws.s3.Client.doesBucketExist*
+
 ```notalanguage
   DOESBUCKETEXIST Method to check if a bucket exists on S3
  
@@ -391,10 +808,10 @@
   Please see:
   http://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html
 
-
-
 ```
-### @Client/doesObjectExist.m
+
+*aws.s3.Client.doesObjectExist*
+
 ```notalanguage
   DOESOBJECTEXIST Method to check if an object exists in an S3 bucket
  
@@ -402,10 +819,10 @@
     s3.initialize();
     s3.doesObjectExist('com-mathworks-testbucket-jblog', 'myobject');
 
-
-
 ```
-### @Client/generateCSEAsymmetricMasterKey.m
+
+*aws.s3.Client.generateCSEAsymmetricMasterKey*
+
 ```notalanguage
   GENERATECSEASYMMETRICMASTERKEY Method to generate a client-side key pair
   The returned key pair can be used for asymmetric client side encryption
@@ -422,10 +839,10 @@
     privateKey = keyPair.getPrivate();
     publicKey = keyPair.getPublic();
 
-
-
 ```
-### @Client/generateCSESymmetricMasterKey.m
+
+*aws.s3.Client.generateCSESymmetricMasterKey*
+
 ```notalanguage
   GENERATECSESYMMETRICMASTERKEY Method to generate a client-side S3 key
   The returned key can be used for client side encryption using a symmetric
@@ -438,10 +855,10 @@
     By default a 256 bit AES keys will be generated
     myKey = s3.generateCSESymmetricKey();
 
-
-
 ```
-### @Client/generatePresignedUrl.m
+
+*aws.s3.Client.generatePresignedUrl*
+
 ```notalanguage
   GENERATEPRESIGNEDPUT generates a pre-signed HTTP Put or Get URL
   Returns a pre-signed URL (as a char vector) for upload using a HTTP Put
@@ -454,10 +871,10 @@
      s3.initialize();
      ingestUrl = s3.generatePresignedUrl('myuploadbucket','myobject.mp4','put');
 
-
-
 ```
-### @Client/generateSSECKey.m
+
+*aws.s3.Client.generateSSECKey*
+
 ```notalanguage
   GENERATESECRETKEY Method to generate a secret key for use with Amazon S3
   The method generates a key that is suitable for use with server side
@@ -467,10 +884,10 @@
   Example:
     mykey = s3.generateSSECKey();
 
-
-
 ```
-### @Client/getBucketAcl.m
+
+*aws.s3.Client.getBucketAcl*
+
 ```notalanguage
   GETBUCKETACL Method to get the ACL of an existing Amazon S3 bucket
   Get the ACL for a bucket, the ACL can then be inspected or applied to
@@ -480,10 +897,10 @@
  
     s3.getBucketAcl(bucketName);
 
-
-
 ```
-### @Client/getObject.m
+
+*aws.s3.Client.getObject*
+
 ```notalanguage
   GETOBJECT Method to retrieve a file object from Amazon S3
   Download an object from a given bucket with a given key name. If
@@ -520,11 +937,17 @@
   final argument in the argument list.
  
     s3.getObject(bucketName, keyName, SSECustomerKey);
-
-
+ 
+  For files of 100MB and greater a aws.s3.transfer.TransferManager based
+  download will be used this can call be used with smaller files by using
+  TransferManager directly.
+ 
+  See also: aws.s3.transfer.TransferManager
 
 ```
-### @Client/getObjectAcl.m
+
+*aws.s3.Client.getObjectAcl*
+
 ```notalanguage
   GETOBJECTACL Method to get the ACL of an existing Amazon S3 object
   Get the ACL for the object, the ACL can then be inspected or applied to
@@ -532,27 +955,27 @@
  
     s3.getObjectAcl(bucketName, keyName);
 
-
-
 ```
-### @Client/getObjectMetadata.m
+
+*aws.s3.Client.getObjectMetadata*
+
 ```notalanguage
   GETOBJECTMETADATA Method to retrieve an Amazon S3 object's metadata
   Download an object's metadata without downloading the object itself
  
   Examples:
 
-
-
 ```
-### @Client/getS3AccountOwner.m
+
+*aws.s3.Client.getS3AccountOwner*
+
 ```notalanguage
   GETS3ACCOUNTOWNER returns owner of the AWS account making the request
 
-
-
 ```
-### @Client/initialize.m
+
+*aws.s3.Client.initialize*
+
 ```notalanguage
   INITIALIZE Configure the MATLAB session to connect to S3
   Once a client has been configured, initialize is used to validate the
@@ -563,10 +986,10 @@
         s3.encryptionScheme = 'SSES3';
         s3.initialize();
 
-
-
 ```
-### @Client/listBuckets.m
+
+*aws.s3.Client.listBuckets*
+
 ```notalanguage
   LISTBUCKETS Method to list the buckets available to the user
   The list of buckets names are returned as a table to the user.
@@ -575,10 +998,10 @@
     s3.initialize();
     s3.listBuckets();
 
-
-
 ```
-### @Client/listObjects.m
+
+*aws.s3.Client.listObjects*
+
 ```notalanguage
   LISTOBJECTS Method to list the objects in an S3 bucket
   Objects in a particular bucket can be listed using:
@@ -602,10 +1025,10 @@
   information. In such cases the owner for the object will be set to an
   empty string.
 
-
-
 ```
-### @Client/load.m
+
+*aws.s3.Client.load*
+
 ```notalanguage
   LOAD, Method to load data from Amazon S3 into the workspace
   This method behaves similarly to the standard MATLAB load command in its
@@ -627,10 +1050,10 @@
   Using load to load a subset of a file will not improve access time as the
   complete file is downloaded.
 
-
-
 ```
-### @Client/putObject.m
+
+*aws.s3.Client.putObject*
+
 ```notalanguage
   PUTOBJECT uploads an object to an Amazon S3 bucket
   Uploads a file as an object to the specified Amazon S3 bucket.
@@ -680,11 +1103,17 @@
   'com-mathworks-matlabobject' and 'file' respectively.
  
    s3.putObject('myBucket', 'myObject.mat', 'myObjectName.mat',myObjectMetadata);
-
-
+ 
+  For files of 100MB and greater a aws.s3.transfer.TransferManager based
+  upload will be used this can call be used with smaller files by using
+  TransferManager directly.
+ 
+  See also: aws.s3.transfer.TransferManager
 
 ```
-### @Client/save.m
+
+*aws.s3.Client.save*
+
 ```notalanguage
   SAVE Method to save files or variables to an Amazon S3 bucket
   A higher level method that uses the built in save syntax to save data to an
@@ -696,10 +1125,10 @@
   The workspace variables should be listed explicitly to overcome this or first
   save the workspace to a local file and then save the resulting file to S3.
 
-
-
 ```
-### @Client/setBucketAcl.m
+
+*aws.s3.Client.setBucketAcl*
+
 ```notalanguage
   SETBUCKETACL Method to set an ACL on an existing object S3 Bucket
   Sets an ACL on a bucket on the S3 service.
@@ -714,10 +1143,10 @@
  
   See Amazon S3 JDK SDK for a complete list of canned ACLs.
 
-
-
 ```
-### @Client/setObjectAcl.m
+
+*aws.s3.Client.setObjectAcl*
+
 ```notalanguage
   SETOBJECTACL Method to set an ACL on an existing object S3 object
   Sets an ACL on an object on the S3 service, the ACL is provided as
@@ -733,10 +1162,10 @@
  
   See Amazon S3 JDK SDK for a complete list of canned ACLs.
 
-
-
 ```
-### @Client/setSSEAwsKeyManagementParams.m
+
+*aws.s3.Client.setSSEAwsKeyManagementParams*
+
 ```notalanguage
   SETSSEAWSKEYMANAGMENTPARAMS Method to set property to request KMS
   This method is used to setup a parameter property that is used with the
@@ -750,10 +1179,10 @@
  
     params = s3.setSSEAwsKeyManagementParams('c1234567-cba2-456a-ade9-a1a3f84c9a8a');
 
-
-
 ```
-### @Client/shutdown.m
+
+*aws.s3.Client.shutdown*
+
 ```notalanguage
   SHUTDOWN Method to shutdown an Amazon s3 client and release resources
   This method should be called to cleanup a client which is no longer
@@ -761,67 +1190,11 @@
  
   Example:  s3.shutdown()
 
-
-
 ```
 
-------
 
+#### aws.s3.Grant
 
-## @EmailAddressGrantee
-
-### @EmailAddressGrantee/EmailAddressGrantee.m
-```notalanguage
-  Class to define an email address based grantee
-  EMAILADDRESSGRANTEE Method returns a Java EmailAddressGrantee object for S3 ACLs
-  It creates an EmailAddressGrantee object based on an email address
-  string that can be used when creating Access Control Lists.
- 
-  Here it is used to grant a permission to an ACL along with a permission
-  Example:
-    emailaddrgrantee = aws.s3.EmailAddressGrantee('joe.blog@example.com');
-    my_perm = s3.Permission('read');
-    my_acl.grantPermission(emailaddrgrantee, my_perm);
-
-    Documentation for aws.s3.EmailAddressGrantee
-       doc aws.s3.EmailAddressGrantee
-
-
-
-
-```
-
-------
-
-
-## @EncryptionScheme
-
-### @EncryptionScheme/EncryptionScheme.m
-```notalanguage
- ENCRYPTIONSCHEME defines the various supported S3 encryption schemes
- 
-    NOENCRYPTION  : do not use encryption
-    CSESMK    : client side with a symmetric master key
-    CSEAMK    : client side with a asymmetric master key
-    KMSCMK    : Key Management Service managed customer master key
-    SSEC      : sever side encryption with a customer supplied key
-    SSEKMS    : server side encryption using the Key Management Service
-    SSES3     : server side encryption using S3 managed encryption keys
-
-    Documentation for aws.s3.EncryptionScheme
-       doc aws.s3.EncryptionScheme
-
-
-
-
-```
-
-------
-
-
-## @Grant
-
-### @Grant/Grant.m
 ```notalanguage
   GRANT Specifies a grant, consisting of one grantee and one permission
   A Grant object can be created using either a grantee and a permission or
@@ -835,14 +1208,10 @@
      % or
      myGrant = aws.s3.Grant(myJavaGranteeObject);
 
-    Documentation for aws.s3.Grant
-       doc aws.s3.Grant
-
-
-
-
 ```
-### @Grant/getGrantee.m
+
+*aws.s3.Grant.getGrantee*
+
 ```notalanguage
   GRANTEE Gets the grantee being granted a permission by this grant
   An object of type CanonicalGrantee, EmailAddressGrantee or GroupGrantee is
@@ -854,24 +1223,19 @@
      % show the identifier of the first grantee
      grantee.Identifier
 
-
-
 ```
-### @Grant/getPermission.m
+
+*aws.s3.Grant.getPermission*
+
 ```notalanguage
   GETPERMISSION Gets the permission being granted to the grantee by this grant
   An aws.s3.Permission object is returned.
 
-
-
 ```
 
-------
 
+#### aws.s3.GroupGrantee
 
-## @GroupGrantee
-
-### @GroupGrantee/GroupGrantee.m
 ```notalanguage
   GROUPGRANTEE Defines group based grantee, returns Java GroupGrantee object
   Permitted values are: AllUsers, AuthenticatedUsers, Logdelivery
@@ -887,145 +1251,72 @@
   In practice values map to URLs that define them, e.g.
   AllUsers maps to http://acs.amazonaws.com/groups/global/AllUsers
 
-    Documentation for aws.s3.GroupGrantee
-       doc aws.s3.GroupGrantee
-
-
-
-
 ```
 
-------
 
+#### aws.s3.AccessControlList
 
-## @ObjectMetadata
-
-### @ObjectMetadata/ObjectMetadata.m
 ```notalanguage
-  ObjectMetadata Represents the object metadata that is stored with S3
-  This includes custom user-supplied metadata, as well as the standard HTTP
-  headers that Amazon S3 sends and receives (Content-Length, ETag,
-  Content-MD5, etc.).
+  ACCESSCONTROLLIST class to define a S3 ACL object
+  The AccessControlList method calls the constructor for the AWS Java SDK
+  ACL object
  
-  Example
+  Example:
     s3 = aws.s3.Client();
-    s3.useCredentialsProviderChain = false;
     s3.initialize();
- 
-    myBucket = 'mb-testbucket-deleteme';
-    myKey = 'myobjectkey';
-    s3.createBucket('mb-testbucket-deleteme');
-    SampleData = rand(100);
-    save SampleData SampleData;
- 
-    myMetadata = aws.s3.ObjectMetadata();
-    myMetadata.addUserMetadata('myMDKey1', 'myMDValue1');
-    myMetadata.addUserMetadata('myMDKey2', 'myMDValue2');
-    myMetadata.addUserMetadata('myMDKey3', 'myMDValue3');
- 
-    s3.putObject(myBucket, 'SampleData.mat', myKey, myMetadata);
-    myDownloadedMetadata = s3.getObjectMetadata(myBucket, myKey);
-    myMap = myDownloadedMetadata.getUserMetadata();
-    % note keys are returned in lower case
-    myMap('mymdkey1')
-    ans =
-         'myMDValue1'
-    keys(myMap)
-    ans =
-      1x4 cell array
-        {'com-mathworks-matlabobject'}    {'mymdkey1'}    {'mymdkey2'}    {'mymdkey3'}
-    values(myMap)
-    ans =
-      1x4 cell array
-        {'file'}    {'myMDValue1'}    {'myMDValue2'}    {'myMDValue3'}
-
-    Documentation for aws.s3.ObjectMetadata
-       doc aws.s3.ObjectMetadata
-
-
-
+    my_acl = aws.s3.AccessControlList();
+    my_perm = aws.s3.Permission('read');
+    email_addr_grantee = aws.s3.EmailAddressGrantee('joe.blog@example.com');
+    my_acl.grantPermission(email_addr_grantee, my_perm);
 
 ```
-### @ObjectMetadata/addUserMetadata.m
+
+*aws.s3.AccessControlList.getGrantsAsList*
+
 ```notalanguage
-  ADDUSERMETADATA Adds key value pair of custom metadata for an object
-  Note that user-metadata for an object is limited by the HTTP request
-  header limit. All HTTP headers included in a request (including user
-  metadata headers and other standard HTTP headers) must be less than 8KB.
-  User-metadata keys are case insensitive and will be returned as lowercase
-  strings, even if they were originally specified with uppercase strings.
+  GETGRANTSASLIST Method to return a list of grants associated with an ACL
+  The list is returned as a MATLAB cell array.
+  Each grant consists of a grantee and a permission.
+  An empty cell array is returned if there are no grants.
  
   Example:
-    save myData x;
-    myMetadata = aws.s3.ObjectMetadata();
-    myMetadata.addUserMetadata('myKey', 'myValue');
-    s3.putObject('com-mathworks-mytestbucket', 'myData.mat', myMetadata);
-
-
+   s3 = aws.s3.Client();
+   s3.initialize();
+   acl = s3.getObjectAcl(bucketname,keyname);
+   grantlist = acl.getGrantsAsList();
 
 ```
-### @ObjectMetadata/getContentLength.m
+
+*aws.s3.AccessControlList.grantPermission*
+
 ```notalanguage
-  GETCONTENTLENGTH Gets the length of the object in bytes
-  Gets the Content-Length HTTP header indicating the size of the associated
-  object in bytes.
-
-
-
-```
-### @ObjectMetadata/getSSEAlgorithm.m
-```notalanguage
-  GETSSEALGORITHM Returns algorithm when encrypting an object using managed keys
-
-
-
-```
-### @ObjectMetadata/getSSEAwsKmsKeyId.m
-```notalanguage
-  GETSSEAWSKMSKEYID Returns KMS key id for server side encryption of an object
-
-
-
-```
-### @ObjectMetadata/getSSECustomerAlgorithm.m
-```notalanguage
-  GETSSECUSTOMERALGORITHM Returns algorithm used with customer-provided keys
-  Returns the server-side encryption algorithm if the object is encrypted using
-  customer-provided keys.
-
-
-
-```
-### @ObjectMetadata/getSSECustomerKeyMd5.m
-```notalanguage
-  GETSSECUSTOMERKEYMD Returns the MD5 digest of the encryption key
-  Returns the base64-encoded MD5 digest of the encryption key for server-side
-  encryption, if the object is encrypted using customer-provided keys.
-
-
-
-```
-### @ObjectMetadata/getUserMetadata.m
-```notalanguage
-  GETUSERMETADATA Gets the custom user-metadata for the associated object
-  A containers.Map of the metadata keys and values is returned. If there is
-  no metadata an empty containers.Map is returned.
+  GRANTPERMISSION Method to add a permission grant to an existing S3 ACL
  
   Example:
-    myDownloadedMetadata = s3.getObjectMetadata(myBucket, myObjectKey);
-    myMap = myDownloadedMetadata.getUserMetaData();
-    myMetadataValue = myMap(lower('myMetadataKey'));
-
-
+    my_acl = aws.s3.AccessControlList();
+    my_perm = aws.s3.Permission('read');
+    email_addr_grantee = aws.s3.EmailAddressGrantee('joe.blog@example.com');
+    my_acl.grantPermission(email_addr_grantee, my_perm);
 
 ```
 
-------
+*aws.s3.AccessControlList.setOwner*
+
+```notalanguage
+  SETOWNER Method to set the owner of an ACL
+ 
+  Example:
+    acl = aws.s3.AccessControlList();
+    owner = aws.s3.createOwner();
+    owner.setDisplayName('my_display_name');
+    owner.setId('aba123456a64f60b91c7736971a81116fb2a07fff2331499c04a967c243b7576');
+    acl.setOwner(owner);
+
+```
 
 
-## @Owner
+#### aws.s3.Owner
 
-### @Owner/Owner.m
 ```notalanguage
   CREATEOWNER Creates an owner object for an ACL
  
@@ -1037,14 +1328,10 @@
     owner.setDisplayName('my_disp_name');
     owner.setId('1234567890abcdef');
 
-    Documentation for aws.s3.Owner
-       doc aws.s3.Owner
-
-
-
-
 ```
-### @Owner/setDisplayName.m
+
+*aws.s3.Owner.setDisplayName*
+
 ```notalanguage
   SETOWNERDISPLAYNAME Method to set the DisplayName of an owner of an ACL
  
@@ -1057,10 +1344,10 @@
     owner.setId('aba123456a64f60b91c7736971a81116fb2a07fff2331499c04a967c243b7576');
     acl.setOwner(owner);
 
-
-
 ```
-### @Owner/setId.m
+
+*aws.s3.Owner.setId*
+
 ```notalanguage
   SETID Method to set the Id of an Owner of an ACL
  
@@ -1073,85 +1360,1053 @@
     owner.setId('aba123456a64f60b91c7736971a81116fb2a07fff2331499c04a967c243b7576');
     acl.setOwner(owner);
 
-
-
 ```
 
-------
 
+#### aws.s3.transfer.AbortableTransfer
 
-## @Permission
-
-### @Permission/Permission.m
 ```notalanguage
-  Class to define a Permission object for S3 Access Control Lists
-  The permission can take one of five enumeration values reflecting various
-  rights.
- 
-  Grant permission permitted values are documented as:
-  	READ, WRITE, READ_ACP, WRITE_ACP and FULL_CONTROL
-  However the Java SDK enum values are:
-    Read, Write, ReadAcp, WriteAcp and FullControl
-  As this is can easily lead to errors this constructor will accept either
-  and is case insensitive
- 
-  Thus these mixed case names are used as the calling convention. Inputs
-  are converted to upper case prior to evaluation to reduce typo errors.
-  Underscores are not allowed for.
- 
-  The following sets my_perm to READ and uses it to create an ACL.
-  A grantee is also required, in this case based on an email address.
- 
-    s3 = aws.s3.Client();
-    s3.initialize();
-    my_perm = aws.s3.Permission('READ');
-    email_addr_grantee = aws.s3.EmailAddressGrantee('joe.blog@example.com');
-    my_acl.grantPermission(email_addr_grantee, my_perm);
- 
-  When granted on a bucket ACL permissions correspond to the following
-  S3 Access Policy permissions apply as per S3 documentation:
- 
- 	READ : Allows grantee to list the objects in the bucket.
- 
- 	WRITE : Allows grantee to create, overwrite, and delete any object in
-            the bucket.
- 
- 	READ_ACP : Allows grantee to read the bucket ACL.
- 
- 	WRITE_ACP : Allows grantee to write the ACL for the applicable bucket.
- 
- 	FULL_CONTROL : Allows grantee the READ, WRITE, READ_ACP, and WRITE_ACP
-                   permissions on the bucket. It is equivalent to granting
-                   READ, WRITE, READ_ACP, and WRITE_ACP ACL permissions.
- 
- 
-  When granted on an object ACL permissions correspond to the following
-  S3 Access Policy permissions apply as per s3 documentation:
- 
- 	READ : Allows grantee to read the object data and its metadata.
- 
- 	WRITE : Not applicable.
- 
- 	READ_ACP : Allows grantee to read the object ACL
- 
- 	WRITE_ACP : Allows grantee to write the ACL for the applicable object.
- 
- 	FULL_CONTROL : Is equivalent to granting READ, READ_ACP, and WRITE_ACP
-                   ACL permissions. Allows grantee the READ, READ_ACP, and
-                   WRITE_ACP permissions on the object.
-
-    Documentation for aws.s3.Permission
-       doc aws.s3.Permission
-
-
-
+  ABORTABLETRANSFER Represents an asynchronous transfer that can be aborted
 
 ```
 
-------
+*aws.s3.transfer.AbortableTransfer.abort*
 
-## Amazon S3 Interface Related Functions:
-### functions/splitName.m
+```notalanguage
+aws.s3.transfer.AbortableTransfer/abort is a function.
+    abort(obj)
+
+```
+
+
+#### aws.s3.transfer.Copy
+
+```notalanguage
+  CopyRepresents an asynchronous copy request from one Amazon S3 location another
+  See TransferManager for more information about creating transfers.
+  Please note that when copying data between s3 buckets there is no progress
+  updates whilst data is in transit. This means that the 
+  TransferProgress.getBytesTransferred() will not be accurate until the copy
+  is complete.
+ 
+  Example:
+    tmb = aws.s3.transfer.TransferManagerBuilder();
+    tmb.setS3Client(s3);
+    tm = tmb.build();
+    copy = tm.copy(sourceBucketName, sourceKeyName, destinationBucketName, destinationKeyName);
+    copyResult = copy.waitForCopyResult();
+
+```
+
+*aws.s3.transfer.Copy.waitForCopyResult*
+
+```notalanguage
+  WAITFORCOPYRESULT Waits for the copy request to complete and returns the result of this request
+
+```
+
+
+#### aws.s3.transfer.Download
+
+```notalanguage
+  DOWNLOAD Represents an asynchronous download from Amazon S3
+  A aws.s3.transfer.Download is returned created using a
+  aws.s3.transfer.TransferManager.download call.
+ 
+  Example:
+    tmb = aws.s3.transfer.TransferManagerBuilder();
+    tmb.setS3Client(s3);
+    tm = tmb.build();
+    download = tm.download(bucketName, keyName, localPath);
+    download.waitForCompletion();
+ 
+    % Download can also be called using a aws.s3.model.GetObjectRequest
+    download = tm.download(getObjectRequest, localPath);
+    download.waitForCompletion();
+
+```
+
+*aws.s3.transfer.Download.pause*
+
+```notalanguage
+  PAUSE Pause the current download operation
+  Returns the information that can be used to resume the download at a later time.
+
+```
+
+*aws.s3.transfer.Download.getObjectMetadata*
+
+```notalanguage
+  GETOBJECTMETADATA Returns the ObjectMetadata for the object being downloaded
+
+```
+
+*aws.s3.transfer.Download.getKey*
+
+```notalanguage
+  GETKEY The key under which this object
+
+```
+
+*aws.s3.transfer.Download.getBucketName*
+
+```notalanguage
+  GETBUCKETNAME The name of the bucket where the object is being downloaded from
+
+```
+
+*aws.s3.transfer.Download.delete*
+
+```notalanguage
+ DELETE   Delete a handle object.
+    DELETE(H) deletes all handle objects in array H. After the delete 
+    function call, H is an array of invalid objects.
+ 
+    See also AWS.S3.TRANSFER.DOWNLOAD, AWS.S3.TRANSFER.DOWNLOAD/ISVALID, CLEAR
+
+Help for aws.s3.transfer.Download/delete is inherited from superclass handle
+
+```
+
+
+#### aws.s3.transfer.MultipleFileDownload
+
+```notalanguage
+  MULTIPLEFILEDOWNLOAD Multiple file download of an entire virtual directory
+ 
+  Example:
+    tmb = aws.s3.transfer.TransferManagerBuilder();
+    tmb.setS3Client(testCase.s3);
+    tm = tmb.build();
+    multipleFileDownload = tm.downloadDirectory(bucketName, virtualDirectoryKeyPrefix, downloadDirectory);
+    multipleFileDownload.waitForCompletion();
+
+```
+
+*aws.s3.transfer.MultipleFileDownload.getKeyPrefix*
+
+```notalanguage
+  GETKEYPREFIX Returns the key prefix of the virtual directory being downloaded
+
+```
+
+*aws.s3.transfer.MultipleFileDownload.getBucketName*
+
+```notalanguage
+  GETBUCKETNAME Returns the name of the bucket from which files are downloaded
+
+```
+
+
+#### aws.s3.transfer.MultipleFileUpload
+
+```notalanguage
+  MULTIPLEFILEUPLOAD Multiple file upload of an entire virtual directory
+ 
+  Example:
+    tmb = aws.s3.transfer.TransferManagerBuilder();
+    tmb.setS3Client(testCase.s3);
+    tm = tmb.build();
+    multipleFileUpload = tm.uploadDirectory(bucketName, virtualDirectoryKeyPrefix, directory, includeSubdirectories);
+    multipleFileUpload.waitForCompletion();
+
+```
+
+*aws.s3.transfer.MultipleFileUpload.getKeyPrefix*
+
+```notalanguage
+  GETKEYPREFIX Returns the key prefix of the virtual directory being uploaded
+
+```
+
+*aws.s3.transfer.MultipleFileUpload.getBucketName*
+
+```notalanguage
+  GETBUCKETNAME Returns the name of the bucket to which files are uploaded
+
+```
+
+
+#### aws.s3.transfer.PauseResult
+
+```notalanguage
+  PAUSERESULT Information that can be used to resume the paused operation; can be null if the pause failed
+
+```
+
+*aws.s3.transfer.PauseResult.getPauseStatus*
+
+```notalanguage
+  PAUSESTATUS Returns information about whether the pause was successful or not; and if not why
+
+```
+
+
+#### aws.s3.transfer.PresignedUrlDownload
+
+```notalanguage
+  PRESIGNEDURLDOWNLOAD Represent the output for the asynchronous download operation using presigned url
+
+```
+
+*aws.s3.transfer.PresignedUrlDownload.getPresignedUrl*
+
+```notalanguage
+  GETPRESIGNEDURL The presigned url from which the object is being downloaded
+
+```
+
+
+#### aws.s3.transfer.Transfer
+
+```notalanguage
+ TRANSFER Represents an asynchronous upload to or download from Amazon S3
+  Use this class to check a transfer's progress,
+  add listeners for progress events, check the state of a transfer,
+  or wait for the transfer to complete.
+
+```
+
+*aws.s3.transfer.Transfer.waitForCompletion*
+
+```notalanguage
+  WAITFORCOMPLETION Waits for this transfer to complete
+
+```
+
+*aws.s3.transfer.Transfer.isDone*
+
+```notalanguage
+  ISDONE Returns whether or not the transfer is finished
+  (i.e. completed successfully, failed, or was canceled)
+  A logical is returned.
+
+```
+
+*aws.s3.transfer.Transfer.getState*
+
+```notalanguage
+  GETSTATE Returns the current state of this transfer
+
+```
+
+*aws.s3.transfer.Transfer.getProgress*
+
+```notalanguage
+  GETPROGRESS Returns progress information about this transfer
+
+```
+
+*aws.s3.transfer.Transfer.getDescription*
+
+```notalanguage
+  GETDESCRIPTION Returns a human-readable description of this transfer
+
+```
+
+
+#### aws.s3.transfer.TransferManager
+
+```notalanguage
+  TransferManager High level utility for managing transfers to Amazon S3
+ 
+  Examples:
+    % Create a TransferManager object
+    tmb = aws.s3.transfer.TransferManagerBuilder();
+    tmb.setS3Client(s3);
+    tm = tmb.build();
+ 
+    % Download an object to a local file
+    download = tm.download(bucketName, keyName, localPath);
+    download.waitForCompletion();
+ 
+    % Abort previous in-flight uploads to a given bucket
+    tm.abortMultipartUploads(bucketName, datetime('now'));
+ 
+    % Copy an object to another object
+    copy = tm.copy(sourceBucketName, sourceKeyName, destinationBucketName, destinationKeyName);
+    copyResult = copy.waitForCopyResult();
+ 
+    % Aborts any multipart uploads that were initiated before the specified date
+    tm.abortMultipartUploads(bucketName, datetime('now'));
+ 
+    % Downloads all objects in the virtual directory designated by the given keyPrefix to the destination directory
+    multipleFileDownload = tm.downloadDirectory(testCase.bucketName, virtualDirectoryKeyPrefix, tDownloadDir);
+    multipleFileDownload.waitForCompletion();
+ 
+    % Uploads all files in the directory to a named bucket
+    multipleFileUpload = tm.uploadDirectory(bucketName, virtualDirectoryKeyPrefix, directory, includeSubdirectories);
+    multipleFileUpload.waitForCompletion();
+ 
+    % Upload a file to a local S3 object
+    upload = tm.upload(bucketName, keyName, localPath);
+    result = upload.waitForUploadResult();
+ 
+    % Shut down a TransferManger when transfers have completed
+    % shutDownS3Client, a logical whether to shut down the underlying Amazon S3 client.
+    tm.shutdownNow(shutDownS3Client)
+
+```
+
+*aws.s3.transfer.TransferManager.shutdownNow*
+
+```notalanguage
+  SHUTDOWNNOW Forcefully shuts down this TransferManager instance
+  Currently executing transfers will not be allowed to finish.
+  Callers should use this method when they either:
+  * have already verified that their transfers have completed by checking each transfer's state
+  * need to exit quickly and don't mind stopping transfers before they complete. 
+  Callers should also remember that uploaded parts from an interrupted upload
+  may not always be automatically cleaned up, but callers can use
+  abortMultipartUploads(datetime) to clean up any upload parts.
+  shutDownS3Client, Logical whether to shut down the underlying Amazon S3 client.
+
+```
+
+*aws.s3.transfer.TransferManager.upload*
+
+```notalanguage
+  UPLOAD Initiates and upload and returns an aws.s3.transfer.Upload object
+ 
+  Example:
+    upload = tm.upload(bucketName, keyName, localPath);
+    result = upload.waitForUploadResult();
+
+```
+
+*aws.s3.transfer.TransferManager.uploadFileList*
+
+```notalanguage
+  UPLOADFILELIST Uploads all specified files to the named bucket named
+  constructing relative keys depending on the commonParentDirectory given
+  S3 will overwrite any existing objects that happen to have the same key,
+  just as when uploading individual files, so use with caution.
+ 
+  Note:
+    There appears to be an issue with the underlying AWS function
+    pending further investigation see the alternative upload methods.
+ 
+  bucketName - The name of the bucket to upload objects to.
+  bucketName should be of type char or a scalar string.
+ 
+  virtualDirectoryKeyPrefix - The key prefix of the virtual directory to
+  upload to. Use an empty string to upload files to the root of the bucket.
+  virtualDirectoryKeyPrefix should be of type char or a scalar string.
+ 
+  directory - The common parent directory of files to upload.
+  The keys of the files in the list of files are constructed relative to
+  this directory and the virtualDirectoryKeyPrefix.
+  directory should be of type char or a scalar string.
+ 
+  files - A list of files to upload. The keys of the files are calculated
+  relative to the common parent directory and the virtualDirectoryKeyPrefix.
+  Files should be of type string or string array.
+ 
+  An aws.s3.transfer.MultipleFileUpload is returned.
+
+```
+
+*aws.s3.transfer.TransferManager.uploadDirectory*
+
+```notalanguage
+  UPLOADDIRECTORY Uploads all files in the directory to a named bucket
+  Optionally recursing for all subdirectories
+  S3 will overwrite any existing objects that happen to have the same key,
+  just as when uploading individual files.
+ 
+  bucketName should be of type char or a scalar string.
+  virtualDirectoryKeyPrefix should be of type char or a scalar string.
+  directory should be of type char or a scalar string.
+  includeSubdirectories should be of type logical.
+  An aws.s3.transfer.MultipleFileUpload is returned.
+ 
+  Example:
+     multipleFileUpload = tm.uploadDirectory(bucketName, virtualDirectoryKeyPrefix, directory, includeSubdirectories);
+     multipleFileUpload.waitForCompletion();
+
+```
+
+*aws.s3.transfer.TransferManager.downloadDirectory*
+
+```notalanguage
+  DOWNLOADDIRECTORY Downloads all objects in the virtual directory designated by the given keyPrefix to the destination directory
+  All virtual subdirectories will be downloaded recursively.
+  An aws.s3.transfer.MultipleFileDownload is returned.
+ 
+  Example:
+    multipleFileDownload = tm.downloadDirectory(testCase.bucketName, virtualDirectoryKeyPrefix, tDownloadDir);
+    multipleFileDownload.waitForCompletion();
+
+```
+
+*aws.s3.transfer.TransferManager.download*
+
+```notalanguage
+  DOWNLOAD Schedules a new transfer to download data from Amazon S3 and save it to the specified file
+ 
+  Example:
+    download = tm.download(bucketName, keyName, localPath);
+    download.waitForCompletion();
+ 
+    % Download can also be called using a aws.s3.model.GetObjectRequest
+    download = tm.download(getObjectRequest, localPath);
+    download.waitForCompletion();
+
+```
+
+*aws.s3.transfer.TransferManager.copy*
+
+```notalanguage
+  COPY Schedules a new transfer to copy data from one Amazon S3 location to another Amazon S3 location
+ 
+  Example:
+    copy = tm.copy(sourceBucketName, sourceKeyName, destinationBucketName, destinationKeyName);
+    copyResult = copy.waitForCopyResult();
+
+```
+
+*aws.s3.transfer.TransferManager.abortMultipartUploads*
+
+```notalanguage
+  ABORTMULTIPARTUPLOADS Aborts any multipart uploads that were initiated before the specified date
+  Uploaded parts from an interrupted upload may not always be automatically cleaned up
+  abortMultipartUploads(datetime) can be used to clean up any upload parts.
+ 
+  Example:
+    tmb = aws.s3.transfer.TransferManagerBuilder();
+    tmb.setS3Client(testCase.s3);
+    tm = tmb.build();
+    tm.abortMultipartUploads(testCase.bucketName, datetime('now'));
+
+```
+
+*aws.s3.transfer.TransferManager.delete*
+
+```notalanguage
+  Call shutdownNow on the TransferManager without shutting down the S3 client
+
+```
+
+
+#### aws.s3.transfer.TransferManagerBuilder
+
+```notalanguage
+  TransferManagerBuilder Use of the builder is preferred over constructors for TransferManager
+ 
+  Example:
+    tmb = aws.s3.transfer.TransferManagerBuilder();
+    tmb.setS3Client(testCase.s3);
+    tm = tmb.build();
+
+```
+
+*aws.s3.transfer.TransferManagerBuilder.withS3Client*
+
+```notalanguage
+  WITHS3CLIENT Sets the low level client used to make the service calls to Amazon S3
+
+```
+
+*aws.s3.transfer.TransferManagerBuilder.setShutDownThreadPools*
+
+```notalanguage
+  SETSHUTDOWNTHREADPOOLS By default, when the transfer manager is shut down, the underlying ExecutorService is also shut down
+
+```
+
+*aws.s3.transfer.TransferManagerBuilder.setS3Client*
+
+```notalanguage
+  SETS3CLIENT Sets the low level client used to make the service calls to Amazon S3.
+
+```
+
+*aws.s3.transfer.TransferManagerBuilder.setDisableParallelDownloads*
+
+```notalanguage
+  setDisableParallelDownloads Sets the option to disable parallel downloads
+
+```
+
+*aws.s3.transfer.TransferManagerBuilder.setAlwaysCalculateMultipartMd5*
+
+```notalanguage
+  SETALWAYSCALCULATEMULTIPARTMD5 Set to true if Transfer Manager should calculate MD5 for multipart uploads
+
+```
+
+*aws.s3.transfer.TransferManagerBuilder.isShutDownThreadPools*
+
+```notalanguage
+  ISSHUTDOWNTHREADPOOLS Returns a logical
+
+```
+
+*aws.s3.transfer.TransferManagerBuilder.isDisableParallelDownloads*
+
+```notalanguage
+  ISDISABLEPARALLELDOWNLOADS Returns if the parallel downloads are disabled or not
+
+```
+
+*aws.s3.transfer.TransferManagerBuilder.getMultipartCopyThreshold*
+
+```notalanguage
+  GETMULTIPARTCOPYTHRESHOLD The multipart copy threshold currently configured in the builder
+
+```
+
+*aws.s3.transfer.TransferManagerBuilder.getMultipartUploadThreshold*
+
+```notalanguage
+  GETMULTIPARTUPLOADTHRESHOLD The multipart upload threshold currently configured in the builder
+
+```
+
+*aws.s3.transfer.TransferManagerBuilder.getAlwaysCalculateMultipartMd5*
+
+```notalanguage
+  GETALWAYSCALCULATEMULTIPARTMD5 Returns true if Transfer Manager should calculate MD5 for multipart uploads
+
+```
+
+*aws.s3.transfer.TransferManagerBuilder.disableParallelDownloads*
+
+```notalanguage
+  disableParallelDownloads Disables parallel downloads
+  See setDisableParallelDownloads
+
+```
+
+*aws.s3.transfer.TransferManagerBuilder.build*
+
+```notalanguage
+  BUILD Construct a TransferManager with the default ExecutorService
+
+```
+
+*aws.s3.transfer.TransferManagerBuilder.standard*
+
+```notalanguage
+  STANDARD Create new instance of builder with all defaults set
+
+```
+
+*aws.s3.transfer.TransferManagerBuilder.defaultTransferManager*
+
+```notalanguage
+  defaultTransferManager Construct a default TransferManager
+
+```
+
+
+#### aws.s3.transfer.TransferProgress
+
+```notalanguage
+  TRANSFERPROGRESS Describes the progress of a transfer
+ 
+  Example:
+    tmb = aws.s3.transfer.TransferManagerBuilder();
+    tmb.setS3Client(testCase.s3);
+    tm = tmb.build();
+    multipleFileUpload = tm.uploadDirectory(bucketName, virtualDirectoryKeyPrefix, directory, includeSubdirectories);
+    tp = multipleFileUpload.getProgress();
+    a = tp.getBytesTransferred;
+    b = tp.getPercentTransferred;
+    c = tp.getTotalBytesToTransfer;
+ 
+  See: https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/index.html?com/amazonaws/services/s3/AmazonS3.html
+
+```
+
+*aws.s3.transfer.TransferProgress.setTotalBytesToTransfer*
+
+```notalanguage
+  SETTOTALBYTESTOTRANSFER
+
+```
+
+*aws.s3.transfer.TransferProgress.getTotalBytesToTransfer*
+
+```notalanguage
+  GETTOTALBYTESTOTRANSFER Returns the total size in bytes of the associated transfer, or -1 if the total size isn't known
+  An int64 is returned
+
+```
+
+*aws.s3.transfer.TransferProgress.getPercentTransferred*
+
+```notalanguage
+  GETPERCENTTRANSFERRED Returns a percentage of the number of bytes transferred out of the total number of bytes to transfer
+  A double is returned
+
+```
+
+*aws.s3.transfer.TransferProgress.getBytesTransferred*
+
+```notalanguage
+  GETDESCRIPTION Returns the number of bytes completed in the associated transfer
+  An int64 is returned
+
+```
+
+
+#### aws.s3.transfer.TransferState
+
+```notalanguage
+  TRANSFERSTATE Enumeration of the possible transfer states
+ 
+  Possible values are:
+    The transfer was canceled and did not complete successfully
+    Canceled,
+    The transfer completed successfully
+    Completed
+    The transfer failed
+    Failed
+    The transfer is actively uploading or downloading and hasn't finished yet
+    InProgress
+    The transfer is waiting for resources to execute and has not started yet
+    Waiting
+
+```
+
+
+```notalanguage
+Enumeration:
+  Canceled
+  Completed
+  Failed
+  InProgress
+  Waiting
+```
+
+
+#### aws.s3.transfer.Upload
+
+```notalanguage
+  UPLOAD Represents an asynchronous upload to Amazon S3
+ 
+  Example:
+    tmb = aws.s3.transfer.TransferManagerBuilder();
+    tmb.setS3Client(testCase.s3);
+    tm = tmb.build();
+    upload = tm.upload(testCase.bucketName, keyName, localPath);
+    result = upload.waitForUploadResult();
+
+```
+
+*aws.s3.transfer.Upload.waitForUploadResult*
+
+```notalanguage
+  WAITFORUPLOADRESULT Waits for this upload to complete and returns the result of this upload
+  This is a blocking call. Be prepared to handle errors when calling this method.
+  Any errors that occurred during the asynchronous transfer will be re-thrown through this method
+
+```
+
+*aws.s3.transfer.Upload.pause*
+
+```notalanguage
+  PAUSE Pause the current upload operation and returns the information that can be used to resume the upload
+
+```
+
+*aws.s3.transfer.Upload.abort*
+
+```notalanguage
+  ABORT Abort the current upload operation
+
+```
+
+*aws.s3.transfer.Upload.delete*
+
+```notalanguage
+ DELETE   Delete a handle object.
+    DELETE(H) deletes all handle objects in array H. After the delete 
+    function call, H is an array of invalid objects.
+ 
+    See also AWS.S3.TRANSFER.UPLOAD, AWS.S3.TRANSFER.UPLOAD/ISVALID, CLEAR
+
+Help for aws.s3.transfer.Upload/delete is inherited from superclass handle
+
+```
+
+
+#### aws.s3.transfer.model.CopyResult
+
+```notalanguage
+  COPYRESULT Contains information returned by Amazon S3 for a completed copy
+ 
+  Example:
+   tmb = aws.s3.transfer.TransferManagerBuilder();
+   tmb.setS3Client(s3);
+   tm = tmb.build();
+   copy = tm.copy(sourceBucketName, sourceKeyName, destinationBucketName, destinationKeyName);
+   copyResult = copy.waitForCopyResult();
+
+```
+
+*aws.s3.transfer.model.CopyResult.getVersionId*
+
+```notalanguage
+  GETVERSIONID Returns the version ID of the new object
+  The version ID is only set if versioning has been enabled for the bucket.
+
+```
+
+*aws.s3.transfer.model.CopyResult.getSourceKey*
+
+```notalanguage
+  GETSOURCEKEY Gets the source bucket key under which the source object to be copied is stored
+
+```
+
+*aws.s3.transfer.model.CopyResult.getETag*
+
+```notalanguage
+  getETag Returns the entity tag identifying the new object
+
+```
+
+*aws.s3.transfer.model.CopyResult.getDestinationKey*
+
+```notalanguage
+  GETDESTINATIONKEY Gets the destination bucket key under which the new, copied object will be stored
+
+```
+
+*aws.s3.transfer.model.CopyResult.getDestinationBucketName*
+
+```notalanguage
+  GETDESTINATIONBUCKETNAME Gets the destination bucket name which will contain the new, copied object
+
+```
+
+
+#### aws.s3.transfer.model.PersistableTransfer
+
+```notalanguage
+  PersistableTransfer base class for the information of a pauseable upload or download
+  Such information can be used to resume the upload or download later on,
+  and can be serialized/deserialized for persistence purposes.
+
+```
+
+*aws.s3.transfer.model.PersistableTransfer.serialize*
+
+```notalanguage
+  SERIALIZE Returns the serialized representation of the paused transfer state
+
+```
+
+
+#### aws.s3.transfer.model.UploadResult
+
+```notalanguage
+  UploadResult Contains information returned by Amazon S3 for a completed upload
+ 
+  Example:
+    tmb = aws.s3.transfer.TransferManagerBuilder();
+    tmb.setS3Client(s3);
+    tm = tmb.build();
+    upload = tm.upload(bucketName, keyName, localPath);
+    uploadResult = upload.waitForUploadResult();
+
+```
+
+*aws.s3.transfer.model.UploadResult.getVersionId*
+
+```notalanguage
+  GETVERSIONID Returns the version ID of the new object
+
+```
+
+*aws.s3.transfer.model.UploadResult.getETag*
+
+```notalanguage
+  GETETAG Returns the entity tag identifying the new object
+
+```
+
+*aws.s3.transfer.model.UploadResult.getBucketName*
+
+```notalanguage
+  GETBUCKETNAME Returns the name of the bucket containing the uploaded object
+
+```
+
+*aws.s3.transfer.model.UploadResult.getKey*
+
+```notalanguage
+  GETKEY Returns the key by which the newly created object is stored
+
+```
+
+
+#### aws.s3.model.GetObjectRequest
+
+```notalanguage
+  GETOBJECTREQUEST Retrieves objects from Amazon S3
+  To use GET, you must have READ access to the object.
+ 
+  Example:
+    getObjectRequest = aws.s3.model.GetObjectRequest(bucketName,keyName);
+
+```
+
+*aws.s3.model.GetObjectRequest.withSSECustomerKey*
+
+```notalanguage
+  WITHSSECUSTOMERKEY Sets the optional customer-provided server-side encryption key to use to decrypt this object
+  Returns the updated GetObjectRequest.
+
+```
+
+
+#### aws.s3.model.PutObjectRequest
+
+```notalanguage
+  PUTOBJECTREQUEST Uploads a new object to the specified Amazon S3 bucket
+ 
+  Example
+    putObjectRequest = aws.s3.model.PutObjectRequest(bucketName, keyName, filePath);
+
+```
+
+*aws.s3.model.PutObjectRequest.withSSEAwsKeyManagementParams*
+
+```notalanguage
+  WITHSSEAWSKEYMANAGEMENTPARAMS Sets the Key Management System parameters used to encrypt the object on server side
+  An updated PutObjectRequest is returned.
+
+```
+
+*aws.s3.model.PutObjectRequest.withSSECustomerKey*
+
+```notalanguage
+  WITHSSECUSTOMERKEY Sets the optional customer-provided server-side encryption key to encrypt the object
+  An updated PutObjectRequest is returned.
+
+```
+
+*aws.s3.model.PutObjectRequest.withMetadata*
+
+```notalanguage
+  PUTOBJECTREQUEST Sets the optional metadata instructing Amazon S3 how to handle the uploaded data
+  (e.g. custom user metadata, hooks for specifying content type, etc.).
+  An updated PutObjectRequest is returned.
+
+```
+
+
+#### aws.s3.model.CompleteMultipartUploadRequest
+
+```notalanguage
+  COMPLETEMULTIPARTUPLOADREQUEST Results of initiating a multipart upload
+ 
+   Contains the results of initiating a multipart upload, particularly
+   the unique ID of the new multipart upload
+ 
+  See: aws.s3.transfer.TransferManager for a high-level alternative.
+
+```
+
+
+#### aws.s3.model.CreateBucketRequest
+
+```notalanguage
+  CREATEBUCKETREQUEST Provides options for creating an Amazon S3 bucket
+ 
+  Example;
+     s3 = aws.s3.Client();
+     s3.initialize();
+     createBucketRequest = aws.s3.model.CreateBucketRequest('myBucketName');
+     createBucketRequest.setCannedAcl(aws.s3.CannedAccessControlList('BucketOwnerFullControl'));
+     s3.createBucket(createBucketRequest);
+
+```
+
+*aws.s3.model.CreateBucketRequest.setBucketName*
+
+```notalanguage
+  SETBUCKETNAME Sets the name of the Amazon S3 bucket to create
+
+```
+
+*aws.s3.model.CreateBucketRequest.setCannedAcl*
+
+```notalanguage
+  SETCANNEDACL Sets the optional Canned ACL to set for the new bucket
+
+```
+
+*aws.s3.model.CreateBucketRequest.setObjectOwnership*
+
+```notalanguage
+  SETOBJECTOWNERSHIP Sets the optional object ownership for the new bucket
+ 
+  Valid string values are:
+ 
+  BucketOwnerPreferred - Objects uploaded to the bucket change ownership to
+                         the bucket owner if the objects are uploaded with
+                         the bucket-owner-full-control canned ACL.
+ 
+          ObjectWriter - The uploading account will own the object if the
+                         object is uploaded with the bucket-owner-full-control
+                         canned ACL.
+ 
+   BucketOwnerEnforced - ACLs are disabled, and the bucket owner owns all the
+                         objects in the bucket. Objects can only be uploaded
+                         to the bucket if they have no ACL or the
+                         bucket-owner-full-control canned ACL.
+
+```
+
+
+#### aws.s3.model.CopyObjectResult
+
+```notalanguage
+  COPYOBJECTRESULT Contains data returned by copyObject call
+  This result may be ignored if not needed; otherwise, use this result
+  to access information about the new object created from the copyObject
+  call.
+ 
+  Example;
+     s3 = aws.s3.Client();
+     s3.initialize();
+     copyObjectResult = s3.copyObject('mysourcebucket','mysourcekey','mydestinationbucket', 'mydestinationkey');
+
+```
+
+
+#### aws.s3.model.UploadPartRequest
+
+```notalanguage
+  UPLOADPARTREQUEST Contains the parameters used for the UploadPart operation
+ 
+  See: aws.s3.transfer.TransferManager for a high-level alternative.
+
+```
+
+*aws.s3.model.UploadPartRequest.setKey*
+
+```notalanguage
+  SETKEY Sets the size of this part, in bytes
+ 
+  See: aws.s3.transfer.TransferManager for a high-level alternative.
+
+```
+
+*aws.s3.model.UploadPartRequest.setLastPart*
+
+```notalanguage
+  SETLASTPART Marks this part as the last part being uploaded in a multipart upload
+ 
+  See: aws.s3.transfer.TransferManager for a high-level alternative.
+
+```
+
+*aws.s3.model.UploadPartRequest.setPartNumber*
+
+```notalanguage
+  setPartNumber Sets the part number
+ 
+  Describes this part's position relative to the other parts in the multipart upload.
+ 
+  See: aws.s3.transfer.TransferManager for a high-level alternative.
+
+```
+
+*aws.s3.model.UploadPartRequest.setPartSize*
+
+```notalanguage
+  SETPARTSIZE Sets the size of this part, in bytes
+ 
+  See: aws.s3.transfer.TransferManager for a high-level alternative.
+
+```
+
+
+#### aws.s3.model.InitiateMultipartUploadRequest
+
+```notalanguage
+  InitiateMultipartUploadRequest 
+ 
+  See: aws.s3.transfer.TransferManager for a high-level alternative.
+
+```
+
+
+#### aws.s3.model.UploadPartResult
+
+```notalanguage
+  UploadPartResult Contains the parameters used for the UploadPart operation
+ 
+  See: aws.s3.transfer.TransferManager for a high-level alternative.
+
+```
+
+
+#### aws.s3.model.InitiateMultipartUploadResult
+
+```notalanguage
+  INITIATEMULTIPARTUPLOADRESULT Results of initiating a multipart upload
+ 
+   Contains the results of initiating a multipart upload, particularly
+   the unique ID of the new multipart upload
+ 
+  See: aws.s3.transfer.TransferManager for a high-level alternative.
+
+```
+
+*aws.s3.model.InitiateMultipartUploadResult.getUploadId*
+
+```notalanguage
+  getUploadId Returns the initiated multipart upload ID
+ 
+  See: aws.s3.transfer.TransferManager for a high-level alternative.
+
+```
+
+
+#### aws.s3.model.CompleteMultipartUploadResult
+
+```notalanguage
+  CompleteMultipartUploadResult The CompleteMultipartUploadResult contains all the information about the CompleteMultipartUpload method
+ 
+  See: aws.s3.transfer.TransferManager for a high-level alternative.
+
+```
+
+##### aws.s3.mathworks.internal.int64FnHandler
+
+```notalanguage
+  int64FnHandler Invokes Java method to convert a Java long to a string and then an int64
+  An int64 is returned.
+
+```
+
+##### aws.s3.mathworks.s3.transferMonitor
+
+```notalanguage
+  TRANSFERMONITOR Provides visual feedback for the progression of a transfer
+ 
+  The following named parameters are accepted:
+     delay : delay in seconds between updates, (default 10)
+      mode : display a "percentage" value or a number of "bytes", (default percentage) 
+   display : "scroll" provide updates on progressive console lines (default)
+             "static" provide updates on a single console line
+ 
+  Examples:
+    upload = tm.upload(testCase.bucketName, keyName, localPath);
+    aws.s3.mathworks.s3.transferMonitor(upload);
+ 
+    aws.s3.mathworks.s3.transferMonitor(download, 'mode', 'bytes', 'display', 'static', 'delay', 1);
+
+```
+
+##### splitName
+
 ```notalanguage
   SPLITNAME Splits an s3 name into bucket and a list of names
  
@@ -1170,382 +2425,10 @@
           elements: {'some'  'other'  'paths'}
                str: 's3://mybucket/some/other/paths'
 
-
-
 ```
-## AWS Common Objects and Methods:
-* @ClientConfiguration
-* @Object
 
 
 
 ------
 
-## @ClientConfiguration
-
-### @ClientConfiguration/ClientConfiguration.m
-```notalanguage
-  CLIENTCONFIGURATION creates a client network configuration object
-  This class can be used to control client behavior such as:
-   * Connect to the Internet through proxy
-   * Change HTTP transport settings, such as connection timeout and request retries
-   * Specify TCP socket buffer size hints
-  (Only limited proxy related methods are currently available)
- 
-  Example, in this case using an s3 client:
-    s3 = aws.s3.Client();
-    s3.clientConfiguration.setProxyHost('proxyHost','myproxy.example.com');
-    s3.clientConfiguration.setProxyPort(8080);
-    s3.initialize();
-
-    Documentation for aws.ClientConfiguration
-       doc aws.ClientConfiguration
-
-
-
-
-```
-### @ClientConfiguration/getNonProxyHosts.m
-```notalanguage
-  GETNONPROXYHOSTS Sets optional hosts accessed without going through the proxy
-  Returns either the nonProxyHosts set on this object, or if not provided,
-  returns the value of the Java system property http.nonProxyHosts.
-  Result is returned as a character vector.
- 
-  Note the following caveat from the Amazon DynamoDB documentation:
- 
-  We still honor this property even when getProtocol() is https, see
-  http://docs.oracle.com/javase/7/docs/api/java/net/doc-files/net-properties.html
-  This property is expected to be set as a pipe separated list. If neither are
-  set, returns the value of the environment variable NO_PROXY/no_proxy.
-  This environment variable is expected to be set as a comma separated list.
-
-
-
-```
-### @ClientConfiguration/setNonProxyHosts.m
-```notalanguage
-  SETNONPROXYHOSTS Sets optional hosts accessed without going through the proxy
-  Hosts should be specified as a character vector.
-
-
-
-```
-### @ClientConfiguration/setProxyHost.m
-```notalanguage
-  SETPROXYHOST Sets the optional proxy host the client will connect through
-  This is based on the setting in the MATLAB preferences panel. If the host
-  is not set there on Windows then the Windows system preferences will be
-  used. Though it is not normally the case proxy settings may vary based on the
-  destination URL, if this is the case a URL should be provided for a specific
-  service. If a URL is not provided then https://s3.amazonaws.com is used as
-  a default and is likely to match the relevant proxy selection rules for AWS
-  traffic.
- 
-  Examples:
- 
-    To have the proxy host automatically set based on the MATLAB preferences
-    panel using the default URL of 'https://s3.amazonaws.com:'
-        clientConfig.setProxyHost();
- 
-    To have the proxy host automatically set based on the given URL:
-        clientConfig.setProxyHost('autoURL','https://examplebucket.amazonaws.com');
- 
-    To force the value of the proxy host to a given value, e.g. myproxy.example.com:
-        clientConfig.setProxyHost('proxyHost','myproxy.example.com');
-    Note this does not overwrite the value set in the preferences panel.
- 
-  The client initialization call will invoke setProxyHost() to set a value based
-  on the MATLAB preference if the proxyHost value is not to an empty value.
-
-
-
-```
-### @ClientConfiguration/setProxyPassword.m
-```notalanguage
-  SETPROXYPASSWORD Sets the optional proxy password
-  This is based on the setting in the MATLAB preferences panel. If the password
-  is not set there on Windows then the Windows system preferences will be
-  used.
- 
-  Examples:
- 
-    To set the password to a given value:
-        clientConfig.setProxyPassword('myProxyPassword');
-    Note this does not overwrite the value set in the preferences panel.
- 
-    To set the password automatically based on provided preferences:
-        clientConfig.setProxyPassword();
- 
-  The client initialization call will invoke setProxyPassword() to set
-  a value based on the MATLAB preference if the proxy password value is set.
- 
-  Note, it is bad practice to store credentials in code, ideally this value
-  should be read from a permission controlled file or other secure source
-  as required.
-
-
-
-```
-### @ClientConfiguration/setProxyPort.m
-```notalanguage
-  SETPROXYPORT Sets the optional proxy port the client will connect through
-  This is normally based on the setting in the MATLAB preferences panel. If the
-  port is not set there on Windows then the Windows system preferences will be
-  used. Though it is not normally the case proxy settings may vary based on the
-  destination URL, if this is the case a URL should be provided for a specific
-  service. If a URL is not provided then https://s3.amazonaws.com is used as
-  a default and is likely to match the relevant proxy selection rules for AWS
-  traffic.
- 
-  Examples:
- 
-    To have the port automatically set based on the default URL of
-    https://s3.amazonaws.com:
-        clientConfig.setProxyPort();
- 
-    To have the port automatically set based on the given URL:
-        clientConfig.setProxyPort('https://examplebucket.amazonaws.com');
- 
-    To force the value of the port to a given value, e.g. 8080:
-        clientConfig.setProxyPort(8080);
-    Note this does not alter the value held set in the preferences panel.
- 
-  The client initialization call will invoke setProxyPort() to set a value based
-  on the MATLAB preference if the proxy port value is not an empty value.
-
-
-
-```
-### @ClientConfiguration/setProxyUsername.m
-```notalanguage
-  SETPROXYUSERNAME Sets the optional proxy username
-  This is based on the setting in the MATLAB preferences panel. If the username
-  is not set there on Windows then the Windows system preferences will be
-  used.
- 
-  Examples:
- 
-     To set the username to a given value:
-         clientConfig.setProxyUsername('myProxyUsername');
-     Note this does not overwrite the value set in the preferences panel.
- 
-     To set the password automatically based on provided preferences:
-         clientConfig.setProxyUsername();
- 
-  The client initialization call will invoke setProxyUsername();
-  to set preference based on the MATLAB preference if the proxyUsername value is
-  not an empty value.
- 
-  Note it is bad practice to store credentials in code, ideally this value
-  should be read from a permission controlled file or other secure source
-  as required.
-
-
-
-```
-
-------
-
-
-## @Object
-
-### @Object/Object.m
-```notalanguage
-  OBJECT Root object for all the AWS SDK objects
-
-    Documentation for aws.Object
-       doc aws.Object
-
-
-
-
-```
-
-------
-
-## AWS Common Related Functions:
-### functions/Logger.m
-```notalanguage
-  Logger - Object definition for Logger
-  ---------------------------------------------------------------------
-  Abstract: A logger object to encapsulate logging and debugging
-            messages for a MATLAB application.
- 
-  Syntax:
-            logObj = Logger.getLogger();
- 
-  Logger Properties:
- 
-      LogFileLevel - The level of log messages that will be saved to the
-      log file
- 
-      DisplayLevel - The level of log messages that will be displayed
-      in the command window
- 
-      LogFile - The file name or path to the log file. If empty,
-      nothing will be logged to file.
- 
-      Messages - Structure array containing log messages
- 
-  Logger Methods:
- 
-      clearMessages(obj) - Clears the log messages currently stored in
-      the Logger object
- 
-      clearLogFile(obj) - Clears the log messages currently stored in
-      the log file
- 
-      write(obj,Level,MessageText) - Writes a message to the log
- 
-  Examples:
-      logObj = Logger.getLogger();
-      write(logObj,'warning','My warning message')
- 
-
-
-
-```
-### functions/aws.m
-```notalanguage
-  AWS, a wrapper to the AWS CLI utility
- 
-  The function assumes AWS CLI is installed and configured with authentication
-  details. This wrapper allows use of the AWS CLI within the
-  MATLAB environment.
- 
-  Examples:
-     aws('s3api list-buckets')
- 
-  Alternatively:
-     aws s3api list-buckets
- 
-  If no output is specified, the command will echo this to the MATLAB
-  command window. If the output variable is provided it will convert the
-  output to a MATLAB object.
- 
-    [status, output] = aws('s3api','list-buckets');
- 
-      output =
- 
-        struct with fields:
- 
-            Owner: [1x1 struct]
-          Buckets: [15x1 struct]
- 
-  By default a struct is produced from the JSON format output.
-  If the --output [text|table] flag is set a char vector is produced.
- 
-
-
-
-```
-### functions/homedir.m
-```notalanguage
-  HOMEDIR Function to return the home directory
-  This function will return the users home directory.
-
-
-
-```
-### functions/isEC2.m
-```notalanguage
-  ISEC2 returns true if running on AWS EC2 otherwise returns false
-
-
-
-```
-### functions/loadKeyPair.m
-```notalanguage
-  LOADKEYPAIR2CERT Reads public and private key files and returns a key pair
-  The key pair returned is of type java.security.KeyPair
-  Algorithms supported by the underlying java.security.KeyFactory library
-  are: DiffieHellman, DSA & RSA.
-  However S3 only supports RSA at this point.
-  If only the public key is a available e.g. the private key belongs to
-  somebody else then we can still create a keypair to encrypt data only
-  they can decrypt. To do this we replace the private key file argument
-  with 'null'.
- 
-  Example:
-   myKeyPair = loadKeyPair('c:\Temp\mypublickey.key', 'c:\Temp\myprivatekey.key')
- 
-   encryptOnlyPair = loadKeyPair('c:\Temp\mypublickey.key')
- 
- 
-
-
-
-```
-### functions/saveKeyPair.m
-```notalanguage
-  SAVEKEYPAIR Writes a key pair to two files for the public and private keys
-  The key pair should be of type java.security.KeyPair
- 
-  Example:
-    saveKeyPair(myKeyPair, 'c:\Temp\mypublickey.key', 'c:\Temp\myprivatekey.key')
- 
-
-
-
-```
-### functions/unlimitedCryptography.m
-```notalanguage
-  UNLIMITEDCRYPTOGRAPHY Returns true if unlimited cryptography is installed
-  Otherwise false is returned.
-  Tests using the AES algorithm for greater than 128 bits if true then this
-  indicates that the policy files have been changed to enabled unlimited
-  strength cryptography.
-
-
-
-```
-### functions/writeSTSCredentialsFile.m
-```notalanguage
-  WRITESTSCREDENTIALSFILE write an STS based credentials file
- 
-  Write an STS based credential file
- 
-    tokenCode is the 2 factor authentication code of choice e.g. from Google
-    authenticator. Note the command must be issued quickly as this value will
-    expire in a number of seconds
- 
-    serialNumber is the AWS 'arn value' e.g. arn:aws:iam::741<REDACTED>02:mfa/joe.blog
-    this can be obtained from the AWS IAM portal interface
- 
-    region is the AWS region of choice e.g. us-west-1
- 
-  The following AWS command line interface (CLI) command will return STS
-  credentials in json format as follows, Note the required multi-factor (mfa)
-  auth version of the arn:
- 
-  aws sts get-session-token --token-code 631446 --serial-number arn:aws:iam::741<REDACTED>02:mfa/joe.blog
- 
-  {
-      "Credentials": {
-          "SecretAccessKey": "J9Y<REDACTED>BaJXEv",
-          "SessionToken": "FQoDYX<REDACTED>KL7kw88F",
-          "Expiration": "2017-10-26T08:21:18Z",
-          "AccessKeyId": "AS<REDACTED>UYA"
-      }
-  }
- 
-  This needs to be rewritten differently to match the expected format
-  below:
- 
-  {
-      "aws_access_key_id": "AS<REDACTED>UYA",
-      "secret_access_key" : "J9Y<REDACTED>BaJXEv",
-      "region" : "us-west-1",
-      "session_token" : "FQoDYX<REDACTED>KL7kw88F"
-  }
-
-
-
-```
-
-
-
-------------    
-
-[//]: # (Copyright 2017-2021 The MathWorks, Inc.)
+##### Copyright 2017-2023, The MathWorks, Inc.

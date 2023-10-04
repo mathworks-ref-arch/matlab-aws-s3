@@ -71,7 +71,7 @@ end
 
 
 % empty struct to return if there is an error
-S = [];
+S = []; %#ok<NASGU> 
 
 [~, ~, objExt] = fileparts(objectName);
 % create a temp file to save the results to using getObject

@@ -48,12 +48,16 @@ function putObject(obj, varargin)
 %
 %  s3.putObject('myBucket', 'myObject.mat', 'myObjectName.mat',myObjectMetadata);
 %
+% For files of 100MB and greater a aws.s3.transfer.TransferManager based
+% upload will be used this can call be used with smaller files by using
+% TransferManager directly.
+%
+% See also: aws.s3.transfer.TransferManager
 
-% Copyright 2017-2021 The MathWorks, Inc.
+% Copyright 2017-2023 The MathWorks, Inc.
 
 %% Imports
-import java.io.File
-import com.amazonaws.services.s3.model.PutObjectRequest
+
 import javax.crypto.SecretKey
 import com.amazonaws.services.s3.model.SSECustomerKey
 import com.amazonaws.services.s3.model.ObjectMetadata
@@ -81,9 +85,9 @@ if  obj.encryptionScheme == aws.s3.EncryptionScheme.SSEKMS
     optArgCtr = optArgCtr + 1;
 end
 
-% if the arg following the optional encryptionScheme arg is a char it is the keyname
+% if the arg following the optional encryptionScheme arg is a char it is the keyName
 if optArgCtr > numel(varargin)
-    % don't have enough args to have a keyname
+    % don't have enough args to have a keyName
     parsedKeyName = false;
 else
     if ischar(varargin{optArgCtr})
@@ -96,7 +100,7 @@ else
 end
 
 if optArgCtr > numel(varargin)
-    % we don't have a metadat arg
+    % we don't have a metadata arg
     parsedMetaData = false;
 else
     % we may have metadata
@@ -111,10 +115,10 @@ end
 parse(p,varargin{:});
 bucketName = p.Results.bucketName;
 object = p.Results.object;
-if  obj.encryptionScheme == aws.s3.EncryptionScheme.SSEC
+if obj.encryptionScheme == aws.s3.EncryptionScheme.SSEC
     ssecKey = p.Results.ssecKey;
 end
-if  obj.encryptionScheme == aws.s3.EncryptionScheme.SSEKMS
+if obj.encryptionScheme == aws.s3.EncryptionScheme.SSEKMS
     sseKmsParam = p.Results.sseKmsParam;
 end
 if parsedKeyName
@@ -128,8 +132,8 @@ else
     metadata = aws.s3.ObjectMetadata();
 end
 
-% check if we are dealing with a relative or absolute path
-% file does not have to exist for fileparts to work
+% Check if we are dealing with a relative or absolute path
+% File does not have to exist for fileparts to work
 [pathstr,~,extstr] = fileparts(object);
 % if path is empty then relative path
 if isempty(pathstr)
@@ -144,19 +148,16 @@ else
     % in this case we've an absolute path so just use that
     absFileName = object;
 end
-% object for upload is a file, object is the file path and name
+% Object for upload is a file, object is the file path and name
 % uploading a file first check it exists
 % does not check if it is a MAT file
 if exist(absFileName,'file') ~= 2
     % Escape any back slashes in paths
     absFileName = strrep(absFileName, '\', '\\');
-    write(logObj,'error', ['File not found: ', absFileName]);
+    write(logObj,'error', ['File not found: ', char(absFileName)]);
 end
 
-% Create a java file handle for the file
-fObj = File(absFileName);
-
-% if keyName is set then use that as the name otherwise reuse the
+% If keyName is set then use that as the name otherwise reuse the
 % object i.e. the file path when creating the request
 if isempty(keyName)
     write(logObj, 'debug', ['Specific key name not set, using: ', object]);
@@ -176,54 +177,93 @@ if strcmpi(extstr,'.mat') || obj.encryptionScheme == aws.s3.EncryptionScheme.SSE
     end
 end
 
-% Create a request to put the specified file along with the metadata
-% The metadata may have been configured above, passed as an argument or a default 'empty' ObjectMetadata object
-pReq = PutObjectRequest(bucketName, keyName, fObj).withMetadata(metadata.Handle);
+fileStats = dir(absFileName);
+fileSize = fileStats.bytes;
+
+% For files less that 100MB use conventional putObject for larger files adopt the
+% newer multipart support introduced in v0.6.0
+% See: https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpuoverview.html
+
+if fileSize < 104857600 %100MB
+    % Create a java file handle for the file
+    fObj = java.io.File(absFileName);
+    % Create a request to put the specified file along with the metadata
+    % The metadata may have been configured above, passed as an argument or a default 'empty' ObjectMetadata object
+    pReq = com.amazonaws.services.s3.model.PutObjectRequest(bucketName, keyName, fObj).withMetadata(metadata.Handle);
 
 
-% upload the object with or without at SSEC key or SSE KMS parameter
-if obj.encryptionScheme == aws.s3.EncryptionScheme.SSEC
-    write(logObj,'verbose',['Uploading a file to S3 using SSEC, bucket: ', bucketName,' object: ',keyName]);
-    % return value is a PutObjectResult response (unused for now)
-    response = obj.Handle.putObject(pReq.withSSECustomerKey(ssecKey));
-elseif obj.encryptionScheme == aws.s3.EncryptionScheme.SSEKMS
-    write(logObj,'verbose',['Uploading a file to S3 using SSEKMS, bucket: ', bucketName,' object: ',keyName]);
-    response = obj.Handle.putObject(pReq.withSSEAwsKeyManagementParams(sseKmsParam));
+    % upload the object with or without at SSEC key or SSE KMS parameter
+    if obj.encryptionScheme == aws.s3.EncryptionScheme.SSEC
+        write(logObj,'verbose',['Uploading a file to S3 using SSEC, bucket: ', bucketName,' object: ',keyName]);
+        % return value is a PutObjectResult response (unused for now)
+        response = obj.Handle.putObject(pReq.withSSECustomerKey(ssecKey));
+    elseif obj.encryptionScheme == aws.s3.EncryptionScheme.SSEKMS
+        write(logObj,'verbose',['Uploading a file to S3 using SSEKMS, bucket: ', bucketName,' object: ',keyName]);
+        response = obj.Handle.putObject(pReq.withSSEAwsKeyManagementParams(sseKmsParam));
+    else
+        write(logObj,'verbose',['Uploading a file to S3, bucket: ', bucketName,' object: ',keyName]);
+        response = obj.Handle.putObject(pReq);
+    end
+
+    % check the response to see that an encryption scheme has been applied where
+    % expected and where possible
+    switch obj.encryptionScheme
+        case {aws.s3.EncryptionScheme.NOENCRYPTION, aws.s3.EncryptionScheme.CSEAMK, aws.s3.EncryptionScheme.CSESMK, aws.s3.EncryptionScheme.KMSCMK}
+            % NOENCRYPTION, data not encrypted at rest don't test
+            % CSEAMK, CSESMK, KMSCMK no response values to test against
+        case aws.s3.EncryptionScheme.SSEC
+            % SSEC, server side encryption with customer provided key additional key is required
+            algval = char(response.getSSECustomerAlgorithm());
+            if ~strcmp(algval, 'AES256')
+                write(logObj,'error',['SSEC SSEAlgorithm set to: ', algval,' expected: AES256, CAUTION data may not be encrypted at rest']);
+            end
+            keyMd5 = char(response.getSSECustomerKeyMd5());
+            if isempty(keyMd5)
+                write(logObj,'error','SSEC KeyMd5 unexpected value');
+            end
+        case aws.s3.EncryptionScheme.SSEKMS
+            % SSEKMS, server-side encryption using a KMS managed key additional parameter is required
+            algval = char(response.getSSEAlgorithm());
+            if ~strcmp(algval, 'aws:kms')
+                write(logObj,'error',['SSEKMS SSEAlgorithm set to: ', algval,' expected: aws:kms, CAUTION data may not be encrypted at rest']);
+            end
+        case aws.s3.EncryptionScheme.SSES3
+            % SSES3, server-side encryption using S3 managed encryption keys
+            algval = char(response.getSSEAlgorithm());
+            if ~strcmp(algval, 'AES256')
+                write(logObj,'error',['SSES3 SSEAlgorithm set to: ', algval,' expected: AES256, CAUTION data may not be encrypted at rest']);
+            end
+        otherwise
+            write(logObj,'error','Unknown encryption scheme, WARNING data may not be encrypted at rest');
+    end % switch
 else
-    write(logObj,'verbose',['Uploading a file to S3, bucket: ', bucketName,' object: ',keyName]);
-    response = obj.Handle.putObject(pReq);
-end
+    putObjectRequest = aws.s3.model.PutObjectRequest(bucketName, keyName, absFileName);
+    putObjectRequest = putObjectRequest.withMetadata(metadata);
+    % upload the object with or without at SSEC key or SSE KMS parameter
+    if obj.encryptionScheme == aws.s3.EncryptionScheme.SSEC
+        write(logObj,'verbose',['Uploading a file to S3 using SSEC, bucket: ', bucketName,' object: ',keyName]);
+        % return value is a PutObjectResult response (unused for now)
+        putObjectRequest = putObjectRequest.withSSECustomerKey(ssecKey);
+    elseif obj.encryptionScheme == aws.s3.EncryptionScheme.SSEKMS
+        write(logObj,'verbose',['Uploading a file to S3 using SSEKMS, bucket: ', bucketName,' object: ',keyName]);
+        putObjectRequest = putObjectRequest.withSSEAwsKeyManagementParams(sseKmsParam);
+    else
+        write(logObj,'verbose',['Uploading a file to S3, bucket: ', bucketName,' object: ',keyName]);
+    end
 
-% check the response to see that an encryption scheme has been applied where
-% expected and where possible
-switch obj.encryptionScheme
-    case {aws.s3.EncryptionScheme.NOENCRYPTION, aws.s3.EncryptionScheme.CSEAMK, aws.s3.EncryptionScheme.CSESMK, aws.s3.EncryptionScheme.KMSCMK}
-        % NOENCRYPTION, data not encrypted at rest don't test
-        % CSEAMK, CSESMK, KMSCMK no response values to test against
-    case aws.s3.EncryptionScheme.SSEC
-        % SSEC, server side encryption with customer provided key additional key is required
-        algval = char(response.getSSECustomerAlgorithm());
-        if ~strcmp(algval, 'AES256')
-            write(logObj,'error',['SSEC SSEAlgorithm set to: ', algval,' expected: AES256, CAUTION data may not be encrypted at rest']);
-        end
-        keyMd5 = char(response.getSSECustomerKeyMd5());
-        if isempty(keyMd5)
-            write(logObj,'error','SSEC KeyMd5 unexpected value');
-        end
-    case aws.s3.EncryptionScheme.SSEKMS
-        % SSEKMS, server-side encryption using a KMS managed key additional parameter is required
-        algval = char(response.getSSEAlgorithm());
-        if ~strcmp(algval, 'aws:kms')
-            write(logObj,'error',['SSEKMS SSEAlgorithm set to: ', algval,' expected: aws:kms, CAUTION data may not be encrypted at rest']);
-        end
-    case aws.s3.EncryptionScheme.SSES3
-        % SSES3, server-side encryption using S3 managed encryption keys
-        algval = char(response.getSSEAlgorithm());
-        if ~strcmp(algval, 'AES256')
-            write(logObj,'error',['SSES3 SSEAlgorithm set to: ', algval,' expected: AES256, CAUTION data may not be encrypted at rest']);
-        end
-    otherwise
-        write(logObj,'error','Unknown encryption scheme, WARNING data may not be encrypted at rest');
-end % switch
+    tmb = aws.s3.transfer.TransferManagerBuilder();
+    tmb = tmb.withS3Client(obj);
+    tm = tmb.build();
+    upload = tm.upload(putObjectRequest);
+    % aws.s3.mathworks.s3.transferMonitor(upload);
+    UploadResult = upload.waitForUploadResult(); %#ok<NASGU>
+    % Result does not provide encryption meta data so it cannot be cross checked at this point as per putObject
+    % Check the state is Completed for consider all other cases to be an error
+    state = upload.getState();
+    tm.shutdownNow(false);
+    if state ~= aws.s3.transfer.TransferState.Completed
+        write(logObj,'error',['Upload finished with state other than ''Completed'': ', char(state)]);
+    end
+end
 
 end % function

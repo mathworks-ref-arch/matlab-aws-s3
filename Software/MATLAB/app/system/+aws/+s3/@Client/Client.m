@@ -115,8 +115,8 @@ classdef Client < aws.Object
     % If a proxy is required to reach the S3 service this is configured using a
     % ClientConfiguration, a simple example of which is as follows:
     %       s3 = aws.s3.Client();
-    %       s3.clientConfig.setProxyHost('proxyHost','myproxy.example.com');
-    %       s3.clientConfig.setProxyPort(8080);
+    %       s3.clientConfiguration.setProxyHost('proxyHost','myproxy.example.com');
+    %       s3.clientConfiguration.setProxyPort(8080);
     %       s3.initialize();
     % If the proxy details are configured in the MATLAB preferences they
     % will be used automatically.
@@ -130,7 +130,7 @@ classdef Client < aws.Object
     %       s3.initialize();
     %
 
-    % Copyright 2018-2021 The MathWorks, Inc.
+    % Copyright 2018-2023 The MathWorks, Inc.
 
     properties
         % default to no encryption

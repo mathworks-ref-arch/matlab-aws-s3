@@ -55,7 +55,7 @@ classdef testCrypto < matlab.unittest.TestCase
             clear 'x';
 
             % create a bucket to hold the objects
-            bucketname = lower(matlab.lang.makeValidName(['com.example.awss3.unittest',datestr(now)],'ReplacementStyle','delete'));
+            bucketname = lower(matlab.lang.makeValidName(['com.example.awss3.unittest',datestr(now)],'ReplacementStyle','delete')); %#ok<*TNOW1>
             s3.createBucket(bucketname);
 
             write(testCase.logObj,'debug','Uploading data to be encrypted by S3');
@@ -488,7 +488,7 @@ classdef testCrypto < matlab.unittest.TestCase
             clear 'x';
 
             % create a bucket to hold the objects
-            bucketname = lower(matlab.lang.makeValidName(['com.example.awss3.unittest',datestr(now)],'ReplacementStyle','delete'));
+            bucketname = lower(matlab.lang.makeValidName(['com.example.awss3.unittest',datestr(now)],'ReplacementStyle','delete')); %#ok<*DATST>
             s3.createBucket(bucketname);
 
             write(testCase.logObj,'debug','Uploading data with invalid key, expecting failure');
@@ -730,7 +730,7 @@ classdef testCrypto < matlab.unittest.TestCase
 
                 % clear old result again and redownload using load semantics
                 clear x;
-                S = clientAlice.load(bucketName,mymatfile)
+                S = clientAlice.load(bucketName,mymatfile);
                 testCase.verifyTrue(isequal(S.x,y)); %  x should equal y
 
                 % cleanup

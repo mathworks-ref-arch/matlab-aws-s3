@@ -13,7 +13,7 @@ classdef testClient < matlab.unittest.TestCase
     %
     % The test suite exercises the basic operations on the S3 Client.
 
-    % Copyright 2017-2021 The MathWorks, Inc.
+    % Copyright 2017-2023 The MathWorks, Inc.
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% Please add test cases below
@@ -198,7 +198,7 @@ classdef testClient < matlab.unittest.TestCase
             s3.initialize();
 
             % Create a bucket
-            uniqName = lower(matlab.lang.makeValidName(['com.example.awss3.unittest',datestr(now)],'ReplacementStyle','delete'));
+            uniqName = lower(matlab.lang.makeValidName(['com.example.awss3.unittest',datestr(now)],'ReplacementStyle','delete')); %#ok<*TNOW1,*DATST>
             s3.createBucket(uniqName);
 
             myresult = s3.doesBucketExist(uniqName);
@@ -671,7 +671,11 @@ classdef testClient < matlab.unittest.TestCase
 
             % create a bucket and object from which to get the ACL
             uniqName = lower(matlab.lang.makeValidName(['com.example.awss3.unittest',datestr(now)],'ReplacementStyle','delete'));
-            s3.createBucket(uniqName);
+            cbr = aws.s3.model.CreateBucketRequest(uniqName);
+            % cbr.setCannedAcl(aws.s3.CannedAccessControlList('BucketOwnerFullControl'));
+            cbr.setObjectOwnership('BucketOwnerPreferred');
+            s3.createBucket(cbr);
+
             s3.putObject(uniqName,tmpName);
 
             initacl = s3.getObjectAcl(uniqName,tmpName); %#ok<NASGU>
@@ -752,6 +756,52 @@ classdef testClient < matlab.unittest.TestCase
             s3.shutdown();
             % delete the temporary file
             delete(tmpName);
+            pause(1.1);
+        end
+
+        function testCopyObject(testCase)
+            write(testCase.logObj,'debug','Testing testCopyObject');
+            % Create the client and initialize
+            s3 = aws.s3.Client();
+            if strcmpi(getenv('GITLAB_CI'), 'true')
+                s3.useCredentialsProviderChain = false;
+            else
+                s3.useCredentialsProviderChain = true;
+            end
+            s3.initialize();
+
+            % create a small block of data and save it to a file
+            x = rand(100,100);
+            tmpName = [tempname,'.mat'];
+            save(tmpName,'x');
+            [~, n, e] = fileparts(tmpName);
+            mySrcKey = [n,e];
+            myDstKey = mySrcKey;
+
+            % create a bucket and object from which to get the metadata
+            uniqSrcName = lower(matlab.lang.makeValidName(['com.example.awss3.unittest.src',datestr(now)],'ReplacementStyle','delete'));
+            s3.createBucket(uniqSrcName);
+            uniqDstName = lower(matlab.lang.makeValidName(['com.example.awss3.unittest.dst',datestr(now)],'ReplacementStyle','delete'));
+            s3.createBucket(uniqDstName);
+
+            s3.putObject(uniqSrcName, tmpName, mySrcKey);
+            delete(tmpName);
+            result = s3.copyObject(uniqSrcName, mySrcKey, uniqDstName, myDstKey);
+            testCase.verifyTrue(isa(result, 'aws.s3.transfer.model.CopyResult') || isa(result, 'aws.s3.model.CopyObjectResult'));
+
+            % compare the downloaded file to the original generate random values
+            s3.getObject(uniqDstName, myDstKey);
+            y = load(myDstKey,'x');
+            testCase.verifyTrue(isequal(x,y.x));
+
+            % remove the bucket and the contained object afterwards
+            s3.deleteObject(uniqSrcName,mySrcKey);
+            s3.deleteBucket(uniqSrcName);
+            s3.deleteObject(uniqDstName,myDstKey);
+            s3.deleteBucket(uniqDstName);
+            s3.shutdown();
+            % delete the temporary file
+            delete(myDstKey);
             pause(1.1);
         end
     end

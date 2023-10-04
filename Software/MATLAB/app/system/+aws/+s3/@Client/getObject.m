@@ -35,18 +35,22 @@ function getObject(obj, varargin)
 %
 %   s3.getObject(bucketName, keyName, SSECustomerKey);
 %
+% For files of 100MB and greater a aws.s3.transfer.TransferManager based
+% download will be used this can call be used with smaller files by using
+% TransferManager directly.
+%
+% See also: aws.s3.transfer.TransferManager
 
-% Copyright 2017-2021 The MathWorks, Inc.
+% Copyright 2017-2023 The MathWorks, Inc.
 
 %% Imports
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import org.apache.commons.io.IOUtils;
-import javax.crypto.SecretKey;
-import com.amazonaws.services.s3.model.SSECustomerKey;
-import com.amazonaws.services.s3.model.GetObjectRequest;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
+% import java.io.File;
+% import java.io.FileInputStream;
+% import java.io.FileOutputStream;
+% import org.apache.commons.io.IOUtils;
+% import javax.crypto.SecretKey;
+% import com.amazonaws.services.s3.model.SSECustomerKey;
+% import com.amazonaws.services.s3.model.S3ObjectInputStream;
 
 logObj = Logger.getLogger();
 
@@ -65,7 +69,7 @@ addOptional(p,'fileName','',@ischar);
 
 parse(p,varargin{:});
 
-if  obj.encryptionScheme == aws.s3.EncryptionScheme.SSEC
+if obj.encryptionScheme == aws.s3.EncryptionScheme.SSEC
     ssecKey = p.Results.ssecKey;
 end
 bucketName = p.Results.bucketName;
@@ -75,52 +79,89 @@ fileName = p.Results.fileName;
 % Begin getting the object
 write(logObj,'verbose',['Getting an object ',bucketName,'/',keyName]);
 
-% Create a get request with the key if provided
+% Get object's meta data to determine size
 if  obj.encryptionScheme == aws.s3.EncryptionScheme.SSEC
-    getReq = GetObjectRequest(bucketName,keyName).withSSECustomerKey(ssecKey);
+    metadata = obj.getObjectMetadata(bucketName, keyName, ssecKey);
 else
-    getReq = GetObjectRequest(bucketName,keyName);
+    metadata = obj.getObjectMetadata(bucketName, keyName);
 end
-s3Object = obj.Handle.getObject(getReq);
+objectLength = metadata.getContentLength();
 
 
-% Get the custom matlab_object field
-% write(logObj,'verbose','Getting object metadata');
-type = s3Object.getObjectMetadata().getUserMetaDataOf(string('com-mathworks-matlabobject')); %#ok<STRQUOT>
-% if the custom metadata field is not set assume it is a regular file
-if isempty(type)
-    type = 'file';
-end
+% For files less that 100MB use conventional putObject for larger files adopt the
+% newer multipart support introduced in v0.6.0
+% See: https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpuoverview.html
 
-if strcmpi(type,'file')
-    % write(logObj,'verbose','Getting object');
+if objectLength < 104857600 %100MB
+    % Create a get request with the key if provided
+    if  obj.encryptionScheme == aws.s3.EncryptionScheme.SSEC
+        getReqJ = com.amazonaws.services.s3.model.GetObjectRequest(bucketName,keyName).withSSECustomerKey(ssecKey);
+    else
+        getReqJ = com.amazonaws.services.s3.model.GetObjectRequest(bucketName,keyName);
+    end
+    s3Object = obj.Handle.getObject(getReqJ);
 
-    if isempty(fileName)
+
+    % Get the custom matlab_object field
+    % write(logObj,'verbose','Getting object metadata');
+    type = s3Object.getObjectMetadata().getUserMetaDataOf(string('com-mathworks-matlabobject')); %#ok<STRQUOT>
+    % if the custom metadata field is not set assume it is a regular file
+    if isempty(type)
+        type = 'file';
+    end
+
+    if strcmpi(type,'file')
+        % write(logObj,'verbose','Getting object');
+        if isempty(fileName)
+            fileName = keyName;
+        end
+
+        % Check for the implications of using this filename
+        if exist(fullfile(cd,fileName),'file') == 2
+            write(logObj,'warning',['Overwriting existing file: ',fileName]);
+        end
+        if exist(fullfile(cd,fileName),'dir') == 7
+            % error out here as will not be able to overwrite the directory
+            write(logObj,'error',['A directory exists named: ',fileName]);
+            error('A directory exists named: %s',fileName);
+        end
+        % Get the input stream for the s3 object
+        % fileStream is a com.amazonaws.services.s3.model.S3ObjectInputStream
+        fileStream = s3Object.getObjectContent();
+        % Create an output to disk, outputStream is a java.io.FileOutputStream
+        outputStream = java.io.FileOutputStream(fileName);
+        % Copy one stream to another and cleanup
+        org.apache.commons.io.IOUtils.copy(fileStream,outputStream);
+        outputStream.close();
+        fileStream.close();
+    else
+        % Shouldn't get here, but could in the case of a variable uploaded with a
+        % release prior to 0.4.1
+        write(logObj,'error',['Unexpected matlabObject value: ',type]);
+    end
+else
+    % Do not support com-mathworks-matlabobject metadata, not supported on upload & deprecated
+    type = metadata.getUserMetaDataOf('com-mathworks-matlabobject');
+    if ~isempty(type) && ~strcmp(type, 'file')
+        write(logObj,'warning',['com-mathworks-matlabobject metadata not supported when using transfer manager, type: ', char(type)]);
+    end
+
+    getObjectRequest = aws.s3.model.GetObjectRequest(bucketName,keyName);
+    if  obj.encryptionScheme == aws.s3.EncryptionScheme.SSEC
+        getObjectRequest = getObjectRequest.withSSECustomerKey(ssecKey);
+    end
+    tmb = aws.s3.transfer.TransferManagerBuilder();
+    tmb = tmb.withS3Client(obj.Handle);
+    tm = tmb.build();
+    if isempty(fileName) || strlength(fileName) == 0
         fileName = keyName;
     end
-
-    % Check for the implications of using this filename
-    if exist(fullfile(cd,fileName),'file') == 2
-        write(logObj,'warning',['Overwriting existing file: ',fileName]);
+    download = tm.download(getObjectRequest, fileName);
+    download.waitForCompletion();
+    state = download.getState();
+    tm.shutdownNow(false);
+    if state ~= aws.s3.transfer.TransferState.Completed
+        write(logObj,'error',['Download finished with state other than ''Completed'': ', char(state)]);
     end
-    if exist(fullfile(cd,fileName),'dir') == 7
-        % error out here as will not be able to overwrite the directory
-        write(logObj,'error',['A directory exists named: ',fileName]);
-        error('A directory exists named: %s',fileName);
-    end
-    % Get the input stream for the s3 object
-    % fileStream is a com.amazonaws.services.s3.model.S3ObjectInputStream
-    fileStream = s3Object.getObjectContent();
-    % Create an output to disk, outputStream is a java.io.FileOutputStream
-    outputStream = FileOutputStream(fileName);
-    % Copy one stream to another and cleanup
-    IOUtils.copy(fileStream,outputStream);
-    outputStream.close();
-    fileStream.close();
-else
-    % Shouldn't get here, but could in the case of a variable uploaded with a
-    % release prior to 0.4.1
-    write(logObj,'error',['Unexpected matlabObject value: ',type]);
 end
-
 end %function
