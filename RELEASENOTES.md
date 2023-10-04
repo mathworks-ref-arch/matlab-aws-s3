@@ -1,5 +1,9 @@
 # MATLAB Interface *for Amazon S3* - Release Notes
 
+## Release 0.6.1 (4th Oct 2023)
+
+* Added Multipart documentation
+
 ## Release 0.6.0 (23rd Aug 2023)
 
 * Added multipart put, get & copy object (large file) support
